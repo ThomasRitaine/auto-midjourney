@@ -9,8 +9,8 @@
 <body>
     <h1>Collections</h1>
     <ul>
-        <% clientNames.forEach(clientName => { %>
-            <li><a href="/collection/<%= clientName %>"><%= clientName %></a></li>
+        <% collections.forEach(collection => { %>
+            <li><a href="/collection/<%= collection %>"><%= collection %></a></li>
         <% }); %>
     </ul>
 </body>

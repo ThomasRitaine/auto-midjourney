@@ -21,33 +21,33 @@ app.get('/', (req, res) => {
 });
 
 app.post('/generate', async (req, res) => {
-    const { prompt, batch, clientName } = req.body;
+    const { prompt, batch, collection } = req.body;
     const generationRequest: GenerationRequest = {
         prompt,
         batch: parseInt(batch),
-        clientName,
+        collection,
     };
 
     generateAndDownload([generationRequest]);
 
     // Create the client directory if it doesn't exist
-    fs.mkdirSync(`image/${clientName}`, { recursive: true });
+    fs.mkdirSync(`image/${collection}`, { recursive: true });
 
-    res.redirect(`/collection/${clientName}`);
+    res.redirect(`/collection/${collection}`);
 });
 
 app.get('/collection', (req, res) => {
     const imageDir = `${import.meta.dir}/../image`;
 
     // Get the list of clients (directories in the image folder)
-    const clientNames = fs.readdirSync(imageDir).filter(client => fs.statSync(join(imageDir, client)).isDirectory());
+    const collections = fs.readdirSync(imageDir).filter(client => fs.statSync(join(imageDir, client)).isDirectory());
 
-    res.render('collections', { clientNames });
+    res.render('collections', { collections });
 });
 
-app.get('/collection/:clientName', (req, res) => {
-    const clientName = req.params.clientName;
-    const clientDir = `${import.meta.dir}/../image/${clientName}`;
+app.get('/collection/:collection', (req, res) => {
+    const collection = req.params.collection;
+    const clientDir = `${import.meta.dir}/../image/${collection}`;
 
     fs.readdir(clientDir, (err, files) => {
         if (err) {
@@ -57,7 +57,7 @@ app.get('/collection/:clientName', (req, res) => {
         // Filter out non-image files
         const imageFiles = files.filter(file => ['png', 'jpg', 'jpeg', 'gif', 'wepb'].includes(file.split('.').pop()!));
 
-        res.render('clientCollection', { images: imageFiles, clientName });
+        res.render('collection', { images: imageFiles, collection });
     });
 });
 

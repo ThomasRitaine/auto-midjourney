@@ -12,8 +12,8 @@ async function downloadImages(generationResponseList: GenerationResponse[]): Pro
         const extension = generationResponse.uri.split(".").pop();
         const filename = `${generationResponse.id}.${extension}`;
 
-        fs.mkdirSync(`image/${generationResponse.clientName}`, { recursive: true });
-        await Bun.write(`image/${generationResponse.clientName}/${filename}`, image);
+        fs.mkdirSync(`image/${generationResponse.collection}`, { recursive: true });
+        await Bun.write(`image/${generationResponse.collection}/${filename}`, image);
         await sleep(1000);
     }
 }

@@ -1,11 +1,11 @@
 export type GenerationRequest = {
     prompt: string;
     batch: number;
-    clientName: string;
+    collection: string;
 };
 
 export type GenerationResponse = {
     id: string;
-    clientName: string;
+    collection: string;
     uri: string;
 };

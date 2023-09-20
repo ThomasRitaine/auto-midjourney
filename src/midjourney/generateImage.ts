@@ -25,14 +25,14 @@ async function generateImage(client: Midjourney, generationRequest: GenerationRe
         
         const upscaledResults = await upscaleImages(client, imagineMJMessage);
 
-        const clientName = generationRequest.clientName;
+        const collection = generationRequest.collection;
 
         generationResponseList = generationResponseList.concat(
           upscaledResults.map(item => {
             return {
               id: uuidv4(),
               uri: item.uri,
-              clientName: clientName,
+              collection: collection,
             };
           })
         );
