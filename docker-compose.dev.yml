@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+
+  app:
+    image: oven/bun
+    volumes:
+      - .:/home/bun/app
+    ports:
+      - "80:3000"
+    command: bun run --watch src/app.ts
