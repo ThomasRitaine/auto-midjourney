@@ -1,7 +1,7 @@
 import { Midjourney } from "midjourney";
 import upscaleImages from "./upscaleImages";
-import { GenerationRequest, GenerationResponse } from "../types";
-import {v4 as uuidv4} from 'uuid';
+import { GenerationRequest, GenerationResponse } from "./types";
+// import {v4 as uuidv4} from 'uuid';
 
 
 async function generateImage(client: Midjourney, generationRequest: GenerationRequest): Promise<GenerationResponse[]> {
@@ -30,7 +30,8 @@ async function generateImage(client: Midjourney, generationRequest: GenerationRe
         generationResponseList = generationResponseList.concat(
           upscaledResults.map(item => {
             return {
-              id: uuidv4(),
+              id: "test-uuidv4",
+              // id: uuidv4(),
               uri: item.uri,
               collection: collection,
             };

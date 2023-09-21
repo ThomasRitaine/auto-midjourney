@@ -1,5 +1,12 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   app: {}
+
+  database:
+    image: postgres:12
+    volumes:
+      - database-data:/var/lib/postgresql/data
+
+volumes:
+  database-data:

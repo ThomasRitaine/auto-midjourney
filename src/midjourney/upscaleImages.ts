@@ -1,4 +1,3 @@
-import { sleep } from "bun";
 import { MJMessage, Midjourney } from "midjourney";
 
 async function upscaleImages(client: Midjourney, imagineMJMessage: MJMessage): Promise<MJMessage[]> {
@@ -29,7 +28,9 @@ async function upscaleImages(client: Midjourney, imagineMJMessage: MJMessage): P
     
     upscaledImages.push(Upscale);
     
-    await sleep(500);
+    // Sleep for 500ms
+    await new Promise(resolve => setTimeout(resolve, 500));
+
   }
 
   return upscaledImages;
