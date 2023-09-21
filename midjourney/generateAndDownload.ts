@@ -1,5 +1,5 @@
 import createClient from "./createClient";
-import downloadImages from "../utils/downloadImages";
+import downloadImages from "./downloadImages";
 import { GenerationRequest, GenerationResponse } from "../types";
 import generateImage from "./generateImage";
 import { sleep } from "bun";

@@ -17,23 +17,28 @@ app.use('/image', express.static(`${import.meta.dir}/../image`));
 
 
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('generationForm');
 });
 
 app.post('/generate', async (req, res) => {
-    const { prompt, batch, collection } = req.body;
-    const generationRequest: GenerationRequest = {
+    const prompts = Array.isArray(req.body.prompt) ? req.body.prompt : [req.body.prompt];
+    const batches = Array.isArray(req.body.batch) ? req.body.batch : [req.body.batch];
+    const collections = Array.isArray(req.body.collection) ? req.body.collection : [req.body.collection];
+
+    const generationRequests: GenerationRequest[] = prompts.map((prompt: string, index: string | number) => ({
         prompt,
-        batch: parseInt(batch),
-        collection,
-    };
+        batch: parseInt(batches[index]),
+        collection: collections[index],
+    }));
 
-    generateAndDownload([generationRequest]);
+    generateAndDownload(generationRequests);
 
-    // Create the client directory if it doesn't exist
-    fs.mkdirSync(`image/${collection}`, { recursive: true });
+    // Create the client directories if they don't exist
+    collections.forEach((collection: string) => {
+        fs.mkdirSync(`image/${collection}`, { recursive: true });
+    });
 
-    res.redirect(`/collection/${collection}`);
+    res.redirect('/collection');
 });
 
 app.get('/collection', (req, res) => {

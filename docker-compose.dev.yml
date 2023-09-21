@@ -1,11 +1,21 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   app:
     image: oven/bun
+    environment:
+      - DATABASE_NAME=auto-midjourney
+      - DATABASE_USER_NAME=webapp
+      - DATABASE_USER_PASSWORD=webapp-password
+      - DATABASE_URL=postgresql://webapp:webapp-password@database:5432/auto-midjourney?schema=public
     volumes:
       - .:/home/bun/app
     ports:
       - "80:3000"
-    command: bun run --watch src/app.ts
+    command: bun run --watch app.ts
+
+  database:
+    environment:
+      POSTGRES_DB: auto-midjourney
+      POSTGRES_USER: webapp
+      POSTGRES_PASSWORD: webapp-password

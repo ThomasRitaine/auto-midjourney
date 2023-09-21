@@ -3,6 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
+    "@types/sequelize": "^4.28.15",
     "bun-types": "latest"
   },
   "peerDependencies": {
@@ -13,6 +14,9 @@
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "midjourney": "^4.3.12",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.33.0",
     "uuid": "^9.0.1"
   }
 }

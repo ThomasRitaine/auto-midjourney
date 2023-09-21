@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generation</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script>
+        function addPrompt() {
+            const promptContainer = document.getElementById('promptContainer');
+            const newPrompt = document.createElement('div');
+            newPrompt.innerHTML = `
+                <label>Prompt:</label>
+                <input type="text" name="prompt[]" required>
+                <label>Batch (Number of images in sets of 4):</label>
+                <input type="number" name="batch[]" required>
+                <label>Client Collection:</label>
+                <input type="text" name="collection[]" required>
+                <hr>
+            `;
+            promptContainer.appendChild(newPrompt);
+        }
+    </script>
+</head>
+<body>
+    <h1>Image Generation</h1>
+    <form action="/generate" method="post">
+        <div id="promptContainer">
+            <!-- Initial prompt fields -->
+            <label>Prompt:</label>
+            <textarea name="prompt" id="prompt[]" rows="4" required></textarea><br><br>
+
+            <label>Batch (Number of images in sets of 4):</label>
+            <input type="number" name="batch[]" required>
+
+            <label>Collection:</label>
+            <input type="text" name="collection[]" required>
+            <hr>
+        </div>
+        <button type="button" onclick="addPrompt()">Add Another Prompt</button>
+        <br><br>
+        <input type="submit" value="Generate">
+    </form>
+    <form action="/generate" method="post">
+        <label for="prompt">Prompt:</label>
+        <textarea name="prompt" id="prompt" rows="4" required></textarea><br><br>
+
+        <label for="batch">Number of Batches (of 4 images):</label>
+        <input type="number" name="batch" id="batch" required><br><br>
+
+        <label for="collection">Collection:</label>
+        <input type="text" name="collection" id="collection" required><br><br>
+
+        <button type="submit">Generate Images</button>
+    </form>
+</body>
+</html>
