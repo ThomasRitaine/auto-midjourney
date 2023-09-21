@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ImageGenerationInfo {
+  id                     String               @id @default(uuid())
+  prompt                 String
+  repeat                 Int
+  image                  Image[]
+  collection             Collection           @relation(fields: [collectionId], references: [id])
+  collectionId           String
+  set                    ImageGenerationGroup @relation(fields: [ImageGenerationGroupId], references: [id])
+  ImageGenerationGroupId String
+}
+
+model ImageGenerationGroup {
+  id                  String                @id @default(uuid())
+  name                String
+  ImageGenerationInfo ImageGenerationInfo[]
+}
+
+model Collection {
+  id                  String                @id @default(uuid())
+  name                String
+  image               Image[]
+  ImageGenerationInfo ImageGenerationInfo[]
+}
+
+model Image {
+  id                    String              @id @default(uuid())
+  path                  String
+  generationInfo        ImageGenerationInfo @relation(fields: [imageGenerationInfoId], references: [id])
+  collection            Collection          @relation(fields: [collectionId], references: [id])
+  imageGenerationInfoId String
+  collectionId          String
+}
