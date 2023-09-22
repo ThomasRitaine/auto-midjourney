@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import fs from 'node:fs';
 import { GenerationRequest } from './types';
-import generateAndDownload from './midjourney/generateAndDownload';
+import generateAndDownload from '../lib/midjourney/generateAndDownload';
 import { join } from 'node:path';
 
 
