@@ -48,6 +48,8 @@ jobs:
           script_stop: true
           script: |
             cd ~/applications/auto-midjourney
+            curl -O -L https://raw.githubusercontent.com/ThomasRitaine/auto-midjourney/main/docker-compose.yml
+            curl -O -L https://raw.githubusercontent.com/ThomasRitaine/auto-midjourney/main/docker-compose.prod.yml
             docker compose -f docker-compose.yml -f docker-compose.prod.yml down
             docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
