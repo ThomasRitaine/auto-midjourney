@@ -1,0 +1,35 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model GenerationInfo {
+  id           String     @id @default(uuid())
+  prompt       String
+  repeat       Int
+  images       Image[]
+  collection   Collection @relation(fields: [collectionId], references: [id])
+  collectionId String
+}
+
+model Collection {
+  id             String           @id @default(uuid())
+  name           String           @unique
+  slug           String           @unique
+  images         Image[]
+  GenerationInfo GenerationInfo[]
+}
+
+model Image {
+  id               String         @id @default(uuid())
+  path             String         @unique
+  generationInfo   GenerationInfo @relation(fields: [generationInfoId], references: [id])
+  collection       Collection     @relation(fields: [collectionId], references: [id])
+  generationInfoId String
+  collectionId     String
+}

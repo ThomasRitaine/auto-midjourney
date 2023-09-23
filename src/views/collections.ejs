@@ -10,7 +10,7 @@
     <h1>Collections</h1>
     <ul>
         <% collections.forEach(collection => { %>
-            <li><a href="/collection/<%= collection %>"><%= collection %></a></li>
+            <li><a href="/collection/<%= collection.slug %>"><%= collection.name %></a></li>
         <% }); %>
     </ul>
 </body>

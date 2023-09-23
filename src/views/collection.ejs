@@ -10,7 +10,7 @@
     <h1><%= collection %> Collection</h1>
     <div id="imageContainer">
         <% images.forEach(image => { %>
-            <img src="/image/<%= collection %>/<%= image %>" alt="<%= image %>" width="33%">
+            <img src="/<%= image.path %>" width="33%">
         <% }); %>
     </div>
 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Image Generation</title>
+    <script>
+        function addPrompt() {
+            const promptContainer = document.getElementById('promptContainer');
+            const newPrompt = document.createElement('div');
+            newPrompt.innerHTML = `
+                <label>Prompt:</label>
+                <input type="text" name="prompt[]" required>
+                <label>Repeat (Number of images in sets of 4):</label>
+                <input type="number" name="repeat[]" required>
+                <label>Collection:</label>
+                <input type="text" name="collection[]" required>
+                <hr>
+            `;
+            promptContainer.appendChild(newPrompt);
+        }
+    </script>
+</head>
+<body>
+    <h1>Image Generation</h1>
+    <form action="/generate" method="post">
+        <div id="promptContainer">
+            <!-- Initial prompt fields -->
+            <label>Prompt:</label>
+            <input type="text" name="prompt[]" required>
+            <label>Repeat (Number of images in sets of 4):</label>
+            <input type="number" name="repeat[]" required>
+            <label>Collection:</label>
+            <input type="text" name="collection[]" required>
+            <hr>
+        </div>
+        <button type="button" onclick="addPrompt()">Add Another Prompt</button>
+        <br><br>
+        <input type="submit" value="Generate">
+    </form>
+</body>
+</html>
