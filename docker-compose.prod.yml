@@ -5,7 +5,7 @@ services:
     image: ghcr.io/thomasritaine/auto-midjourney:main
     restart: unless-stopped
     environment:
-      - DATABASE_URL="postgresql://${DATABASE_USER_NAME}:${DATABASE_USER_PASSWORD}@database:5432/${DATABASE_NAME}?schema=public"
+      - DATABASE_URL=postgresql://${DATABASE_USER_NAME}:${DATABASE_USER_PASSWORD}@database:5432/${DATABASE_NAME}?schema=public
     volumes:
       - image:/usr/src/app/image
     networks:
