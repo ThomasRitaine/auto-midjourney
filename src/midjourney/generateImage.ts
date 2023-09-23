@@ -1,44 +1,43 @@
 import { Midjourney } from "midjourney";
 import upscaleImages from "./upscaleImages";
-import { GenerationRequest, GenerationResponse } from "../types";
-import {v4 as uuidv4} from 'uuid';
+import { GenerationInfo, Image } from "@prisma/client";
+import { createImageByUri } from "../services/prisma-crud/image";
 
 
-async function generateImage(client: Midjourney, generationRequest: GenerationRequest): Promise<GenerationResponse[]> {
+async function generateImage(client: Midjourney, generationInfo: GenerationInfo): Promise<Image[]> {
 
-  var generationResponseList: GenerationResponse[] = [];
+  let images: Image[] = [];
+
+  for (let i = 0; i < generationInfo.repeat; i++) {
+
+    const imagineMJMessage = await client.Imagine(
+      generationInfo.prompt,
+      (uri: string, progress: string) => {
+        // console.log("loading", uri, "progress", progress);
+        console.log("progress", progress);
+      }
+    );
   
-  for (let i = 0; i < generationRequest.batch; i++) {
-    
-        const imagineMJMessage = await client.Imagine(
-          generationRequest.prompt,
-          (uri: string, progress: string) => {
-            // console.log("loading", uri, "progress", progress);
-            console.log("progress", progress);
-          }
-        );
-      
-        if (!imagineMJMessage) {
-          console.log("no message");
-          return [];
-        }
-        
-        const upscaledResults = await upscaleImages(client, imagineMJMessage);
-
-        const collection = generationRequest.collection;
-
-        generationResponseList = generationResponseList.concat(
-          upscaledResults.map(item => {
-            return {
-              id: uuidv4(),
-              uri: item.uri,
-              collection: collection,
-            };
-          })
-        );
+    if (!imagineMJMessage) {
+      console.log("no message");
+      return images;
     }
-            
-    return generationResponseList;
+    
+    const upscaledResults = await upscaleImages(client, imagineMJMessage);
+
+    const uriList = upscaledResults.map(item => {
+      return item.uri;
+    });
+
+    for (const uri of uriList) {
+      // Sleep one second to avoid getting rate limited
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      images.push(await createImageByUri(uri, generationInfo));
+    }
+  }
+
+  return images;
 }
 
 export default generateImage;

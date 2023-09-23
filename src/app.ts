@@ -1,65 +1,98 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import fs from 'node:fs';
-import { GenerationRequest } from './types';
 import generateAndDownload from './midjourney/generateAndDownload';
-import { join } from 'node:path';
+import path from 'path';
+import {
+    createCollection,
+    getCollectionByName,
+    getAllCollections,
+    getCollectionBySlug
+} from './services/prisma-crud/collection';
+import { getImagesByCollectionId } from './services/prisma-crud/image';
+import { Collection, GenerationInfo } from '@prisma/client';
+import { createGenerationInfo } from './services/prisma-crud/generationInfo';
 
 
 const app = express();
 const port = 3000;
 
 app.set('view engine', 'ejs');
-app.set('views', `${import.meta.dir}/views`);
+app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(`${import.meta.dir}/../public`));
-app.use('/image', express.static(`${import.meta.dir}/../image`));
-
+app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use('/image', express.static(path.join(__dirname, '..', 'image')));
 
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('generate');
 });
 
 app.post('/generate', async (req, res) => {
-    const { prompt, batch, collection } = req.body;
-    const generationRequest: GenerationRequest = {
-        prompt,
-        batch: parseInt(batch),
-        collection,
-    };
 
-    generateAndDownload([generationRequest]);
+    const prompts = Array.isArray(req.body.prompt) ? req.body.prompt : [req.body.prompt];
+    const repeats = Array.isArray(req.body.repeat) ? req.body.repeat : [req.body.repeat];
+    const collectionsName = Array.isArray(req.body.collection) ? req.body.collection : [req.body.collection];
 
-    // Create the client directory if it doesn't exist
-    fs.mkdirSync(`image/${collection}`, { recursive: true });
+    const collections: Collection[] = [];
 
-    res.redirect(`/collection/${collection}`);
+    for (const collectionName of collectionsName) {
+        let collection = await getCollectionByName(collectionName);
+        if (!collection) {
+            collection = await createCollection(collectionName);
+        }
+        collections.push(collection);
+    }
+
+    const generationInfoGroup: GenerationInfo[] = [];
+
+    for (let index = 0; index < prompts.length; index++) {
+        const prompt = prompts[index];
+        const generationInfo = await createGenerationInfo({
+            prompt,
+            repeat: parseInt(repeats[index]),
+            collection: {
+                connect: {
+                    id: collections[index].id
+                }
+            },
+        });
+        generationInfoGroup.push(generationInfo);
+    }
+
+    generateAndDownload(generationInfoGroup);
+
+    const isCollectionUnique = generationInfoGroup.every(item => item.id === generationInfoGroup[0].id);
+
+    generationInfoGroup.forEach(generationInfo => {
+        console.log(`Generating id : ${generationInfo.id}`);
+    });        
+
+    if(generationInfoGroup.length === 1 || isCollectionUnique) {
+        res.redirect(`/collection/${collections[0].slug}`);
+    } else {
+        res.redirect('/collection');
+    }
 });
 
-app.get('/collection', (req, res) => {
-    const imageDir = `${import.meta.dir}/../image`;
 
-    // Get the list of clients (directories in the image folder)
-    const collections = fs.readdirSync(imageDir).filter(client => fs.statSync(join(imageDir, client)).isDirectory());
+app.get('/collection', async (req, res) => {
+    
+    const collections = await getAllCollections();
 
     res.render('collections', { collections });
 });
 
-app.get('/collection/:collection', (req, res) => {
-    const collection = req.params.collection;
-    const clientDir = `${import.meta.dir}/../image/${collection}`;
+app.get('/collection/:slug', async (req, res) => {
+    const slug = req.params.slug;
+    const collection = await getCollectionBySlug(slug);
 
-    fs.readdir(clientDir, (err, files) => {
-        if (err) {
-            return res.status(500).send('Error reading the client directory.');
-        }
+    // return 404 if the collection doesn't exist
+    if (!collection) return res.status(404).send('Collection not found');
 
-        // Filter out non-image files
-        const imageFiles = files.filter(file => ['png', 'jpg', 'jpeg', 'gif', 'wepb'].includes(file.split('.').pop()!));
+    const images = await getImagesByCollectionId(collection.id);
 
-        res.render('collection', { images: imageFiles, collection });
-    });
+    res.render('collection', { images, collection: collection.name });
 });
+
 
 app.listen(port, () => {
     console.log(`Server started on http://localhost:${port}`);

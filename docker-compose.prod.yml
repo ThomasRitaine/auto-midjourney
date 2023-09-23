@@ -1,24 +1,34 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   app:
     image: ghcr.io/thomasritaine/auto-midjourney:main
     restart: unless-stopped
-    env_file:
-      - .env
+    environment:
+      - DATABASE_URL="postgresql://${DATABASE_USER_NAME}:${DATABASE_USER_PASSWORD}@database:5432/${DATABASE_NAME}?schema=public"
     volumes:
-      - image:/home/bun/app/image
+      - image:/usr/src/app/image
     networks:
+      - default
       - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_DOMAIN_NAME}`)"
       - "traefik.http.routers.${APP_NAME}.middlewares=auth-http-auto-midjourney@file"
 
+  database:
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER_NAME}
+      POSTGRES_PASSWORD: ${DATABASE_USER_PASSWORD}
+    networks:
+      - default
+
 volumes:
   image:
 
 networks:
+  default:
   proxy:
     external: true
