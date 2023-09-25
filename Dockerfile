@@ -21,6 +21,6 @@ RUN npm run prisma:generate
 
 USER node
 
-EXPOSE 3000
+EXPOSE 3000 5555
 
-CMD [ "npm", "run", "prod" ]
+CMD (npx prisma studio &) && npm run prod
