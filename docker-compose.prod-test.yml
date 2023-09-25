@@ -2,23 +2,29 @@ version: "3.8"
 
 services:
   app:
-    image: node:18-alpine
-    working_dir: /usr/src/app
-    user: node:node
-    volumes:
-      - .:/usr/src/app
+    image: automidjourney:test-prod
     environment:
       - DATABASE_NAME=auto-midjourney
       - DATABASE_USER_NAME=webapp
       - DATABASE_USER_PASSWORD=webapp-password
       - DATABASE_URL=postgresql://webapp:webapp-password@database:5432/auto-midjourney?schema=public
+    volumes:
+      - image:/usr/src/app/image
+    networks:
+      - default
     ports:
       - "80:3000"
-      - "5555:5555"
-    command: sh -c "(npx prisma studio &) && npm run dev"
 
   database:
     environment:
       POSTGRES_DB: auto-midjourney
       POSTGRES_USER: webapp
       POSTGRES_PASSWORD: webapp-password
+    networks:
+      - default
+
+volumes:
+  image:
+
+networks:
+  default:
