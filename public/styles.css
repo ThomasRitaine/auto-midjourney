@@ -40,3 +40,43 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+
+/* **************** */
+/* Collection style */
+/* **************** */
+
+.imageWrapper {
+    position: relative;
+    display: inline-block;
+    width: 33%;
+    transition: transform .2s;
+    cursor: pointer;
+}
+
+.imageWrapper:hover {
+    transform: scale(1.05); /* Slightly enlarge the image on hover */
+}
+
+.imageWrapper img {
+    width: 100%;
+    display: block;
+}
+
+.downloadButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none; /* Hidden by default */
+}
+
+.imageWrapper:hover .downloadButton {
+    display: block; /* Display on hover */
+}

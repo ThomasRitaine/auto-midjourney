@@ -10,9 +10,11 @@
     <h1><%= collection %> Collection</h1>
     <div id="imageContainer">
         <% images.forEach(image => { %>
-            <img src="/<%= image.path %>" width="33%">
+            <div class="imageWrapper">
+                <img src="/<%= image.path %>" alt="Collection Image">
+                <a href="/<%= image.path %>" class="downloadButton" download>Download</a>
+            </div>
         <% }); %>
     </div>
-
 </body>
 </html>
