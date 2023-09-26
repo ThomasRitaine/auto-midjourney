@@ -1,46 +1,46 @@
 body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f4f4f4;
 }
 
 h1 {
-    color: #333;
+  color: #333;
 }
 
 form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 label {
-    display: block;
-    margin-bottom: 10px;
+  display: block;
+  margin-bottom: 10px;
 }
 
-textarea, input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+textarea,
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 button {
-    padding: 10px 15px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
-
 
 /* **************** */
 /* Collection style */
@@ -48,63 +48,63 @@ button:hover {
 
 /* Local styles for image hover buttons */
 .imageWrapper {
-    position: relative;
-    display: inline-block;
-    width: 33%;
-    transition: transform .2s;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
+  width: 33%;
+  transition: transform 0.2s;
+  cursor: pointer;
 }
 
 .imageWrapper:hover {
-    transform: scale(1.05); /* Slightly enlarge the image on hover */
+  transform: scale(1.05); /* Slightly enlarge the image on hover */
 }
 
 .imageWrapper img {
-    width: 100%;
-    display: block;
+  width: 100%;
+  display: block;
 }
 
 .btn {
-    position: absolute;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    display: none; /* Hidden by default */
-    text-decoration: none; /* Remove any underlining from the anchor */
+  position: absolute;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none; /* Hidden by default */
+  text-decoration: none; /* Remove any underlining from the anchor */
 }
 
 .btn-success {
-    background-color: #28a745;
-    color: #fff;
+  background-color: #28a745;
+  color: #fff;
 }
 
 .btn-warning {
-    background-color: #ffc107;
-    color: #212529;
+  background-color: #ffc107;
+  color: #212529;
 }
 
 .btn-danger {
-    background-color: #dc3545;
-    color: #fff;
+  background-color: #dc3545;
+  color: #fff;
 }
 
 .imageWrapper:hover .btn {
-    display: block; /* Display on hover */
+  display: block; /* Display on hover */
 }
 
 /* Adjust positions */
 .btn-success {
-    bottom: 5px;
-    left: 5px;
+  bottom: 5px;
+  left: 5px;
 }
 
 .btn-warning {
-    top: 5px;
-    right: 5px;
+  top: 5px;
+  right: 5px;
 }
 
 .btn-danger {
-    bottom: 5px;
-    right: 5px;
+  bottom: 5px;
+  right: 5px;
 }

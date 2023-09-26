@@ -1,4 +1,4 @@
-import { Collection, PrismaClient } from "@prisma/client";
+import { type Collection, PrismaClient } from "@prisma/client";
 import { mkdir } from "fs/promises";
 import slugify from "../../util/slugify";
 
@@ -59,7 +59,7 @@ export const getFirstImagesOfCollectionId = async (
       path: true,
     },
   });
-  return result ? { path: result.path } : null;
+  return result != null ? { path: result.path } : null;
 };
 
 export const updateCollection = async (
@@ -72,6 +72,6 @@ export const updateCollection = async (
   });
 };
 
-export const deleteCollection = async (id: string) => {
-  return await prisma.collection.delete({ where: { id } });
+export const deleteCollection = async (id: string): Promise<void> => {
+  await prisma.collection.delete({ where: { id } });
 };

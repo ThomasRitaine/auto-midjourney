@@ -1,15 +1,15 @@
-var gallery = document.querySelector("#gallery");
-var getVal = function (elem, style) {
+const gallery = document.querySelector("#gallery");
+const getVal = (elem, style) => {
   return parseInt(window.getComputedStyle(elem).getPropertyValue(style));
 };
-var getHeight = function (item) {
+const getHeight = function (item) {
   return item.querySelector(".content").getBoundingClientRect().height;
 };
-var resizeAll = function () {
-  var altura = getVal(gallery, "grid-auto-rows");
-  var gap = getVal(gallery, "grid-row-gap");
+const resizeAll = function () {
+  const altura = getVal(gallery, "grid-auto-rows");
+  const gap = getVal(gallery, "grid-row-gap");
   gallery.querySelectorAll(".gallery-item").forEach(function (item) {
-    var el = item;
+    const el = item;
     el.style.gridRowEnd =
       "span " + Math.ceil((getHeight(item) + gap) / (altura + gap));
   });
@@ -20,9 +20,9 @@ gallery.querySelectorAll("img").forEach(function (item) {
     console.log(item.src);
   } else {
     item.addEventListener("load", function () {
-      var altura = getVal(gallery, "grid-auto-rows");
-      var gap = getVal(gallery, "grid-row-gap");
-      var gitem = item.parentElement.parentElement;
+      const altura = getVal(gallery, "grid-auto-rows");
+      const gap = getVal(gallery, "grid-row-gap");
+      const gitem = item.parentElement.parentElement;
       gitem.style.gridRowEnd =
         "span " + Math.ceil((getHeight(gitem) + gap) / (altura + gap));
       item.classList.remove("byebye");

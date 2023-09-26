@@ -14,7 +14,7 @@ import {
   deleteImage,
   getImagesByCollectionId,
 } from "./services/prisma-crud/image";
-import { Collection, GenerationInfo } from "@prisma/client";
+import { type Collection, type GenerationInfo } from "@prisma/client";
 import { createGenerationInfo } from "./services/prisma-crud/generationInfo";
 
 const app = express();
@@ -88,7 +88,7 @@ app.get("/collection", async (req, res) => {
   const collections = await getAllCollections();
 
   // Get the number of image in each collection
-  let numberImagesInCollection: { [key: string]: number } = {};
+  const numberImagesInCollection: Record<string, number> = {};
   for (const collection of collections) {
     numberImagesInCollection[collection.id] = await getNumberImageOfCollection(
       collection.id
@@ -96,7 +96,7 @@ app.get("/collection", async (req, res) => {
   }
 
   // Get the first image of each collection
-  let firstImageOfCollection: { [key: string]: string | null } = {};
+  const firstImageOfCollection: Record<string, string | null> = {};
   for (const collection of collections) {
     const image = await getFirstImagesOfCollectionId(collection.id);
     firstImageOfCollection[collection.id] = image ? image.path : null;
@@ -114,7 +114,10 @@ app.get("/collection/:slug", async (req, res) => {
   const collection = await getCollectionBySlug(slug);
 
   // return 404 if the collection doesn't exist
-  if (!collection) return res.status(404).send("Collection not found");
+  if (!collection) {
+    res.status(404).send("Collection not found");
+    return;
+  }
 
   const images = await getImagesByCollectionId(collection.id);
 
@@ -126,9 +129,10 @@ app.delete("/image/:id", async (req, res) => {
 
   try {
     await deleteImage(id);
-    res
-      .status(200)
-      .send({ success: true, message: `Image ${id} deleted successfully.` });
+    res.status(200).send({
+      success: true,
+      message: `Image ${id} deleted successfully.`,
+    });
   } catch (error) {
     res.status(404).send({ success: false, message: "Image not found." });
   }
