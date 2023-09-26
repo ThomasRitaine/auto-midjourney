@@ -1,8 +1,9 @@
-import { Collection, GenerationInfo, Image, PrismaClient } from '@prisma/client';
+import { GenerationInfo, Image, PrismaClient } from '@prisma/client';
 import fs from 'fs';
 import { mkdir } from "fs/promises";
 import sharp from 'sharp';
-import https from 'https';
+import downloadImage from '../../util/downloadImage';
+
 
 
 const prisma = new PrismaClient();
@@ -38,6 +39,14 @@ export const createImageByUri = async (uri: string, generationInfo: GenerationIn
     
     if (!fs.existsSync(folder)) await mkdir(folder, { recursive: true });
     
+    console.log(`Downloading ${uri} to ${nativeFilePath}`);
+    try {
+        await downloadImage(uri, folder, image.id);
+        console.log("Image downloaded successfully!");
+    } catch (error) {
+        console.error("Failed to download image:", error);
+    }
+    
     // Optimizing the image
     console.log(`Optimizing ${nativeFilePath} to ${webpFilePath}`);
     await sharp(nativeFilePath)
@@ -47,7 +56,7 @@ export const createImageByUri = async (uri: string, generationInfo: GenerationIn
     // Delete the native image
     console.log(`Deleting ${nativeFilePath}`);
     fs.unlinkSync(nativeFilePath);
-
+    
     // Update the path value of the image
     console.log(`Updating ${image.id} path to ${webpFilePath}`);
     await prisma.image.update({
