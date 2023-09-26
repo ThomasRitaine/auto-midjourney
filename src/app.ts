@@ -121,6 +121,18 @@ app.get("/collection/:slug", async (req, res) => {
   res.render("collection", { images, collection: collection.name });
 });
 
+app.delete("/image/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await deleteImage(id);
+    res
+      .status(200)
+      .send({ success: true, message: `Image ${id} deleted successfully.` });
+  } catch (error) {
+    res.status(404).send({ success: false, message: "Image not found." });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);
