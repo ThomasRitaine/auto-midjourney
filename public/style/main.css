@@ -46,6 +46,7 @@ button:hover {
 /* Collection style */
 /* **************** */
 
+/* Local styles for image hover buttons */
 .imageWrapper {
     position: relative;
     display: inline-block;
@@ -63,20 +64,47 @@ button:hover {
     display: block;
 }
 
-.downloadButton {
+.btn {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
-    color: #fff;
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     display: none; /* Hidden by default */
+    text-decoration: none; /* Remove any underlining from the anchor */
 }
 
-.imageWrapper:hover .downloadButton {
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.imageWrapper:hover .btn {
     display: block; /* Display on hover */
+}
+
+/* Adjust positions */
+.btn-success {
+    bottom: 5px;
+    left: 5px;
+}
+
+.btn-warning {
+    top: 5px;
+    right: 5px;
+}
+
+.btn-danger {
+    bottom: 5px;
+    right: 5px;
 }

@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= collection %> Collection</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-    <h1><%= collection %> Collection</h1>
-    <div id="imageContainer">
-        <% images.forEach(image => { %>
-            <div class="imageWrapper">
-                <img src="/<%= image.path %>" alt="Collection Image">
-                <a href="/<%= image.path %>" class="downloadButton" download>Download</a>
-            </div>
-        <% }); %>
+    <link rel="stylesheet" href="/style/main.css" />
+    <link rel="stylesheet" href="/style/collection.css" />
+  </head>
+
+  <body>
+    <h1>Collection : <%= collection %></h1>
+
+    <div class="gallery" id="gallery">
+      <% images.forEach(function(image) { %>
+      <div class="gallery-item" style="grid-row-end: span 15">
+        <div class="content">
+          <img src="/<%= image.path %>" alt="" class="" />
+        </div>
+      </div>
+      <% }); %>
     </div>
-</body>
+
+    <script src="/script/collection-gallery.js"></script>
+  </body>
 </html>
