@@ -1,6 +1,7 @@
 import { Collection, GenerationInfo, Image, PrismaClient } from '@prisma/client';
 import fs from 'fs';
 import { mkdir } from "fs/promises";
+import sharp from 'sharp';
 import https from 'https';
 
 
@@ -27,22 +28,31 @@ export const createImageByUri = async (uri: string, generationInfo: GenerationIn
         }
     });
 
-    const extension = uri.split(".").pop();
-    const filename = `${image.id}.${extension}`;
     const collection = await prisma.collection.findUnique({ where: { id: generationInfo.collectionId } });
+    
+    const extension = uri.split(".").pop();
+    const nativeFileName = `${image.id}.${extension}`;
     const folder = `image/${collection?.slug}`;
+    const nativeFilePath = `${folder}/${nativeFileName}`;
+    const webpFilePath = `${folder}/${image.id}.webp`;
     
     if (!fs.existsSync(folder)) await mkdir(folder, { recursive: true });
     
-    const file = fs.createWriteStream(`${folder}/${filename}`);
-    const request = https.get(uri, function(response) {
-        response.pipe(file);
-    });
+    // Optimizing the image
+    console.log(`Optimizing ${nativeFilePath} to ${webpFilePath}`);
+    await sharp(nativeFilePath)
+    .webp({ smartSubsample: true })
+    .toFile(webpFilePath);
+    
+    // Delete the native image
+    console.log(`Deleting ${nativeFilePath}`);
+    fs.unlinkSync(nativeFilePath);
 
     // Update the path value of the image
+    console.log(`Updating ${image.id} path to ${webpFilePath}`);
     await prisma.image.update({
         where: { id: image.id },
-        data: { path: `${folder}/${filename}` }
+        data: { path: webpFilePath }
     });
 
     return image;
