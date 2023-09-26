@@ -1,19 +1,12 @@
 import { Collection, PrismaClient } from '@prisma/client';
 import { mkdir } from "fs/promises";
+import slugify from '../../util/slugify';
 
 
 const prisma = new PrismaClient();
 
-function stringToSlug(string: string) {
-    return string
-      .toLowerCase()                              // Convert the string to lowercase
-      .replace(/\s+/g, '-')                       // Replace spaces with hyphens
-      .replace(/[^a-z0-9-_]/g, '')                // Remove characters that are not alphanumeric, hyphens, or underscores
-      .replace(/^-+|-+$/g, '');                   // Trim hyphens from the beginning and end
-}
-
 export const createCollection = async (name: string): Promise<Collection> => {
-    const slug = stringToSlug(name);
+    const slug = slugify(name);
     const newCollection = await prisma.collection.create({ data: {name, slug} });
     const folder = `image/${slug}`;
     await mkdir(folder, { recursive: true });
