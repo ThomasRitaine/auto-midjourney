@@ -102,5 +102,8 @@ export const updateImage = async (
 };
 
 export const deleteImage = async (id: string): Promise<void> => {
+  const image = await prisma.image.findUnique({ where: { id } });
+  if (image == null) return;
+  fs.unlinkSync(image.path);
   await prisma.image.delete({ where: { id } });
 };

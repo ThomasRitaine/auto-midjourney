@@ -46,13 +46,15 @@ async function downloadImage(
           imageData = Buffer.concat([imageData, chunk]);
         });
 
-        response.on("end", async (): Promise<void> => {
-          try {
-            await writeFileAsync(filePath, imageData);
-            resolve();
-          } catch (error) {
-            reject(error);
-          }
+        response.on("end", () => {
+          void (async () => {
+            try {
+              await writeFileAsync(filePath, imageData);
+              resolve();
+            } catch (error) {
+              reject(error);
+            }
+          })();
         });
 
         response.on("error", reject);
