@@ -32,6 +32,13 @@ app.get("/", (req, res) => {
 
 app.post("/generate", (req, res) => {
   void (async () => {
+    const userToken: string = req.body.token;
+
+    if (userToken !== process.env.GENERATION_TOKEN) {
+      res.status(403).send("Invalid token.");
+      return;
+    }
+
     const prompts = Array.isArray(req.body.prompt)
       ? req.body.prompt
       : [req.body.prompt];

@@ -37,6 +37,17 @@
       </div>
       <button type="button" onclick="addPrompt()">Add Another Prompt</button>
       <br /><br />
+      <hr />
+      <br />
+      <label>Token:</label>
+      <input
+        type="text"
+        name="token"
+        required
+        oninvalid="this.setCustomValidity('Hep hep hep, ton token batard')"
+        oninput="this.setCustomValidity('')"
+      />
+      <br /><br />
       <input type="submit" value="Generate" />
     </form>
   </body>
