@@ -4,11 +4,11 @@ import generateAndDownload from "./midjourney/generateAndDownload";
 import path from "path";
 import {
   createCollection,
-  getCollectionByName,
   getAllCollections,
   getCollectionBySlug,
   getNumberImageOfCollection,
   getFirstImagesOfCollectionId,
+  getCollectionByNameOrSlug,
 } from "./services/prisma-crud/collection";
 import {
   deleteImage,
@@ -35,9 +35,11 @@ app.post("/generate", (req, res) => {
     const prompts = Array.isArray(req.body.prompt)
       ? req.body.prompt
       : [req.body.prompt];
+
     const repeats = Array.isArray(req.body.repeat)
       ? req.body.repeat
       : [req.body.repeat];
+
     const collectionsName = Array.isArray(req.body.collection)
       ? req.body.collection
       : [req.body.collection];
@@ -45,9 +47,16 @@ app.post("/generate", (req, res) => {
     const collections: Collection[] = [];
 
     for (const collectionName of collectionsName) {
-      let collection = await getCollectionByName(collectionName);
+      let collection = await getCollectionByNameOrSlug(collectionName);
       if (collection == null) {
-        collection = await createCollection(collectionName);
+        try {
+          collection = await createCollection(collectionName);
+        } catch (error) {
+          console.error(error);
+          res.status(403).send("Collection already exists.");
+          return;
+        }
+        console.log(`Collection ${collectionName} created.`);
       }
       collections.push(collection);
     }
@@ -73,10 +82,6 @@ app.post("/generate", (req, res) => {
     const isCollectionUnique = generationInfoGroup.every(
       (item) => item.id === generationInfoGroup[0].id
     );
-
-    generationInfoGroup.forEach((generationInfo) => {
-      console.log(`Generating id : ${generationInfo.id}`);
-    });
 
     if (generationInfoGroup.length === 1 || isCollectionUnique) {
       res.redirect(`/collection/${collections[0].slug}`);

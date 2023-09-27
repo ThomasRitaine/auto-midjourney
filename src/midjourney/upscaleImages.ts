@@ -27,11 +27,15 @@ async function upscaleImages(
     });
 
     if (Upscale == null) {
-      console.log(`no Upscale for ${option}`);
+      console.log(`No Upscale for ${option}`);
       continue;
     }
 
     upscaledImages.push(Upscale);
+
+    console.log(
+      `Upscaled ${upscaledImages.length} over ${upscaleOptions.length}`
+    );
 
     // Sleep for 500ms
     await new Promise((resolve) => setTimeout(resolve, 500));

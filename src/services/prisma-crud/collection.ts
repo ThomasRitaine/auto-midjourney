@@ -11,8 +11,6 @@ export const createCollection = async (name: string): Promise<Collection> => {
   });
   const folder = `image/${slug}`;
   await mkdir(folder, { recursive: true });
-  console.log("Collection created", newCollection.name);
-  console.log("Collection slug", newCollection.slug);
   return newCollection;
 };
 
@@ -24,6 +22,20 @@ export const getCollectionByName = async (
   name: string
 ): Promise<Collection | null> => {
   return await prisma.collection.findUnique({ where: { name } });
+};
+
+export const getCollectionByNameOrSlug = async (
+  name: string
+): Promise<Collection | null> => {
+  const collection = await prisma.collection.findUnique({
+    where: { name },
+  });
+  if (collection != null) {
+    return collection;
+  }
+  return await prisma.collection.findUnique({
+    where: { slug: slugify(name) },
+  });
 };
 
 export const getCollectionBySlug = async (

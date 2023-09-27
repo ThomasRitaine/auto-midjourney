@@ -13,13 +13,12 @@ async function generateImage(
     const imagineMJMessage = await client.Imagine(
       generationInfo.prompt,
       (uri: string, progress: string) => {
-        // console.log("loading", uri, "progress", progress);
         console.log("progress", progress);
       }
     );
 
     if (imagineMJMessage == null) {
-      console.log("no message");
+      console.log("No message upon generation end");
       return images;
     }
 
