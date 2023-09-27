@@ -113,3 +113,45 @@ body {
     max-width: 100%;
   }
 }
+
+/* Action Buttons */
+.image-actions {
+  position: absolute;
+  bottom: 5%; /* position the buttons 5% from the bottom of the image */
+  left: 50%;
+  transform: translateX(-50%); /* center the buttons horizontally */
+  display: none;
+  gap: 10px;
+}
+
+.gallery-item:hover .image-actions {
+  display: flex;
+}
+
+.btn-download,
+.btn-delete {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.btn-download {
+  background-color: green;
+  color: white;
+}
+
+.btn-delete {
+  background-color: red;
+  color: white;
+}
+
+.btn-download:hover {
+  background-color: #006600; /* slightly darker green */
+}
+
+.btn-delete:hover {
+  background-color: #990000; /* slightly darker red */
+}
+
+.full:hover .image-actions {
+  display: none;
+}
