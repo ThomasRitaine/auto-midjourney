@@ -3,21 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/style/main.css" />
+    <link rel="stylesheet" href="/style/generate.css" />
     <title>Image Generation</title>
     <script>
       function addPrompt() {
         const promptContainer = document.getElementById("promptContainer");
         const newPrompt = document.createElement("div");
         newPrompt.innerHTML = `
-                <br />
-                <label>Prompt:</label>
-                <input type="text" name="prompt[]" required>
-                <label>Repeat (Number of images in sets of 4):</label>
-                <input type="number" name="repeat[]" value="2" required>
-                <label>Collection:</label>
-                <input type="text" name="collection[]">
-                <hr>
+                <div class="prompt-box">
+                  <label>Prompt:</label>
+                  <input type="text" name="prompt[]" required>
+                  <label>Repeat (Number of images in sets of 4):</label>
+                  <input type="number" name="repeat[]" value="2" required>
+                  <label>Collection:</label>
+                  <input type="text" name="collection[]">
+                </div>
             `;
         promptContainer.appendChild(newPrompt);
       }
@@ -43,16 +43,17 @@
       />
       <br />
       <hr />
+      <br />
       <div id="promptContainer">
-        <br />
         <!-- Initial prompt fields -->
-        <label>Prompt:</label>
-        <input type="text" name="prompt[]" required />
-        <label>Repeat (Number of images in sets of 4):</label>
-        <input type="number" name="repeat[]" value="2" required />
-        <label>Collection:</label>
-        <input type="text" name="collection[]" />
-        <hr />
+        <div class="prompt-box">
+          <label>Prompt:</label>
+          <input type="text" name="prompt[]" required />
+          <label>Repeat (Number of images in sets of 4):</label>
+          <input type="number" name="repeat[]" value="2" required />
+          <label>Collection:</label>
+          <input type="text" name="collection[]" />
+        </div>
       </div>
       <br />
       <button type="button" onclick="addPrompt()">Add Another Prompt</button>
