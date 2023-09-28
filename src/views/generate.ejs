@@ -9,17 +9,24 @@
       function addPrompt() {
         const promptContainer = document.getElementById("promptContainer");
         const newPrompt = document.createElement("div");
+        newPrompt.className = "prompt-box";
         newPrompt.innerHTML = `
-                <div class="prompt-box">
-                  <label>Prompt:</label>
-                  <input type="text" name="prompt[]" required>
-                  <label>Repeat (Number of images in sets of 4):</label>
-                  <input type="number" name="repeat[]" value="2" required>
-                  <label>Collection:</label>
-                  <input type="text" name="collection[]">
-                </div>
+                <label>Prompt:</label>
+                <input type="text" name="prompt[]" required>
+                <label>Repeat (Number of images in sets of 4):</label>
+                <input type="number" name="repeat[]" value="2" required>
+                <label>Collection:</label>
+                <input type="text" name="collection[]">
+                <button type="button" class="delete-button" onclick="deletePrompt(this)">Delete</button>
             `;
         promptContainer.appendChild(newPrompt);
+      }
+
+      function deletePrompt(btn) {
+        const promptBox = btn.closest(".prompt-box");
+        if (promptBox) {
+          promptBox.remove();
+        }
       }
     </script>
   </head>
@@ -53,6 +60,13 @@
           <input type="number" name="repeat[]" value="2" required />
           <label>Collection:</label>
           <input type="text" name="collection[]" />
+          <button
+            type="button"
+            class="delete-button"
+            onclick="deletePrompt(this)"
+          >
+            Delete
+          </button>
         </div>
       </div>
       <br />

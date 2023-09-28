@@ -37,6 +37,18 @@ input[type="password"] {
   border: 1px solid #ddd;
 }
 
+button[type="button"].delete-button {
+  background-color: #e74c3c; /* Red color for the delete button */
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute; /* Absolute positioning for the button */
+  bottom: 10px; /* Place it 10px from the bottom of the prompt-box */
+  right: 10px; /* Place it 10px from the right of the prompt-box */
+}
+
 button[type="button"] {
   background-color: #2980b9;
   color: #fff;
@@ -63,6 +75,7 @@ input[type="submit"] {
   border-radius: 5px;
   margin-bottom: 20px;
   background-color: #ecf0f1;
+  position: relative;
 }
 
 hr {
