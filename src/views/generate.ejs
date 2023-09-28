@@ -10,12 +10,13 @@
         const promptContainer = document.getElementById("promptContainer");
         const newPrompt = document.createElement("div");
         newPrompt.innerHTML = `
+                <br />
                 <label>Prompt:</label>
                 <input type="text" name="prompt[]" required>
                 <label>Repeat (Number of images in sets of 4):</label>
-                <input type="number" name="repeat[]" required>
+                <input type="number" name="repeat[]" value="2" required>
                 <label>Collection:</label>
-                <input type="text" name="collection[]" required>
+                <input type="text" name="collection[]">
                 <hr>
             `;
         promptContainer.appendChild(newPrompt);
@@ -25,29 +26,37 @@
   <body>
     <h1>Image Generation</h1>
     <form action="/generate" method="post">
-      <div id="promptContainer">
-        <!-- Initial prompt fields -->
-        <label>Prompt:</label>
-        <input type="text" name="prompt[]" required />
-        <label>Repeat (Number of images in sets of 4):</label>
-        <input type="number" name="repeat[]" required />
-        <label>Collection:</label>
-        <input type="text" name="collection[]" required />
-        <hr />
-      </div>
-      <button type="button" onclick="addPrompt()">Add Another Prompt</button>
-      <br /><br />
-      <hr />
-      <br />
       <label>Token:</label>
       <input
-        type="text"
+        type="password"
         name="token"
         required
         oninvalid="this.setCustomValidity('Hep hep hep, ton token batard')"
         oninput="this.setCustomValidity('')"
       />
-      <br /><br />
+      <br />
+      <label>Default Collection:</label>
+      <input
+        type="text"
+        name="defaultCollection"
+        placeholder="Set default collection value"
+      />
+      <br />
+      <hr />
+      <div id="promptContainer">
+        <br />
+        <!-- Initial prompt fields -->
+        <label>Prompt:</label>
+        <input type="text" name="prompt[]" required />
+        <label>Repeat (Number of images in sets of 4):</label>
+        <input type="number" name="repeat[]" value="2" required />
+        <label>Collection:</label>
+        <input type="text" name="collection[]" />
+        <hr />
+      </div>
+      <br />
+      <button type="button" onclick="addPrompt()">Add Another Prompt</button>
+      <br /><br /><br />
       <input type="submit" value="Generate" />
     </form>
   </body>

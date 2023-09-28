@@ -51,9 +51,14 @@ app.post("/generate", (req, res) => {
       ? req.body.collection
       : [req.body.collection];
 
+    const defaultCollection: string = req.body.defaultCollection;
+
     const collections: Collection[] = [];
 
-    for (const collectionName of collectionsName) {
+    for (let collectionName of collectionsName) {
+      collectionName =
+        collectionName === "" ? defaultCollection : collectionName;
+
       let collection = await getCollectionByNameOrSlug(collectionName);
       if (collection == null) {
         try {
