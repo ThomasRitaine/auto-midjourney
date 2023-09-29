@@ -16,18 +16,22 @@ const resizeAll = function () {
 };
 gallery.querySelectorAll("img").forEach(function (item) {
   item.classList.add("byebye");
-  if (item.complete) {
-    console.log(item.src);
-  } else {
-    item.addEventListener("load", function () {
+  let count = 0;
+  const checkComplete = setInterval(function () {
+    if (item.complete) {
+      clearInterval(checkComplete);
       const altura = getVal(gallery, "grid-auto-rows");
       const gap = getVal(gallery, "grid-row-gap");
       const gitem = item.parentElement.parentElement;
       gitem.style.gridRowEnd =
         "span " + Math.ceil((getHeight(gitem) + gap) / (altura + gap));
       item.classList.remove("byebye");
-    });
-  }
+    } else if (count >= 6) {
+      clearInterval(checkComplete);
+      console.log(`Failed to load ${item.src} after 6 attempts`);
+    }
+    count++;
+  }, 300);
 });
 window.addEventListener("resize", resizeAll);
 gallery.querySelectorAll(".gallery-item").forEach(function (item) {
@@ -61,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Add event listener for prompt
   const promptButtons = document.querySelectorAll(".btn-prompt");
   promptButtons.forEach((btn) => {
-    console.log(btn.dataset.prompt);
     btn.addEventListener("click", function (event) {
       alert(btn.dataset.prompt);
     });
