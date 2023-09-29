@@ -18,6 +18,12 @@
           <img src="/<%= image.path %>" alt="" class="" />
           <div class="image-actions">
             <button class="btn-download">Download</button>
+            <button
+              class="btn-prompt"
+              data-prompt="<%= image.generationInfo.prompt %>"
+            >
+              See prompt
+            </button>
             <button class="btn-delete">Delete</button>
           </div>
         </div>
@@ -25,6 +31,12 @@
       <% }); %>
     </div>
 
+    <script>
+      function showPrompt(event, promptText) {
+        event.stopPropagation();
+        alert(promptText);
+      }
+    </script>
     <script src="/script/collection-gallery.js"></script>
   </body>
 </html>

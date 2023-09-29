@@ -129,6 +129,7 @@ body {
 }
 
 .btn-download,
+.btn-prompt,
 .btn-delete {
   padding: 5px 10px;
   cursor: pointer;
@@ -139,6 +140,11 @@ body {
   color: white;
 }
 
+.btn-prompt {
+  background-color: #007bff; /* Default blue color for the prompt button */
+  color: white;
+}
+
 .btn-delete {
   background-color: red;
   color: white;
@@ -146,6 +152,10 @@ body {
 
 .btn-download:hover {
   background-color: #006600; /* slightly darker green */
+}
+
+.btn-prompt:hover {
+  background-color: #0056b3; /* Slightly darker blue on hover */
 }
 
 .btn-delete:hover {

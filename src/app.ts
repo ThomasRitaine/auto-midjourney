@@ -12,7 +12,7 @@ import {
 } from "./services/prisma-crud/collection";
 import {
   deleteImage,
-  getImagesByCollectionId,
+  getImagesWithPromptByCollectionId,
 } from "./services/prisma-crud/image";
 import { type Collection, type GenerationInfo } from "@prisma/client";
 import { createGenerationInfo } from "./services/prisma-crud/generationInfo";
@@ -141,7 +141,7 @@ app.get("/collection/:slug", (req, res) => {
       return;
     }
 
-    const images = await getImagesByCollectionId(collection.id);
+    const images = await getImagesWithPromptByCollectionId(collection.id);
 
     res.render("collection", { images, collection: collection.name });
   })();

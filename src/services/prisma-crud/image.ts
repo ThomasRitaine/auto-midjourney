@@ -88,6 +88,24 @@ export const getImagesByCollectionId = async (
   return collection.images;
 };
 
+export const getImagesWithPromptByCollectionId = async (
+  collectionId: string
+): Promise<Image[] | null> => {
+  const images = await prisma.image.findMany({
+    where: {
+      collectionId,
+    },
+    include: {
+      generationInfo: {
+        select: {
+          prompt: true,
+        },
+      },
+    },
+  });
+  return images;
+};
+
 export const updateImage = async (
   id: string,
   updatedData: any

@@ -34,6 +34,7 @@ gallery.querySelectorAll(".gallery-item").forEach(function (item) {
   item.addEventListener("click", function (event) {
     if (
       !event.target.classList.contains("btn-download") &&
+      !event.target.classList.contains("btn-prompt") &&
       !event.target.classList.contains("btn-delete")
     ) {
       item.classList.toggle("full");
@@ -54,6 +55,15 @@ document.addEventListener("DOMContentLoaded", function () {
       anchor.href = imageUrl;
       anchor.download = "";
       anchor.click();
+    });
+  });
+
+  // Add event listener for prompt
+  const promptButtons = document.querySelectorAll(".btn-prompt");
+  promptButtons.forEach((btn) => {
+    console.log(btn.dataset.prompt);
+    btn.addEventListener("click", function (event) {
+      alert(btn.dataset.prompt);
     });
   });
 
