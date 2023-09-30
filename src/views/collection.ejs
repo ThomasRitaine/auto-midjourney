@@ -3,13 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= collection %> Collection</title>
+    <title><%= collection.name %> Collection</title>
     <link rel="stylesheet" href="/style/main.css" />
     <link rel="stylesheet" href="/style/collection.css" />
   </head>
 
   <body>
-    <h1>Collection : <%= collection %></h1>
+    <h1>Collection : <%= collection.name %></h1>
+
+    <button
+      id="toggleVisibilityBtn"
+      data-collection-id="<%= collection.id %>"
+      data-is-public="<%= collection.isPublic %>"
+    >
+      <%= collection.isPublic ? 'Make Private' : 'Make Public' %>
+    </button>
+
+    <br /><br />
 
     <div class="gallery" id="gallery">
       <% images.forEach(function(image) { %>
@@ -37,6 +47,7 @@
         alert(promptText);
       }
     </script>
-    <script src="/script/collection-gallery.js"></script>
+    <script src="/script/collection/gallery.js"></script>
+    <script src="/script/collection/toggle-visibility.js"></script>
   </body>
 </html>

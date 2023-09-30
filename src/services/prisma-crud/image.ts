@@ -106,6 +106,41 @@ export const getImagesWithPromptByCollectionId = async (
   return images;
 };
 
+export const getRandomImage = async (): Promise<Image | null> => {
+  // Get all public collections
+  const publicCollections = await prisma.collection.findMany({
+    where: {
+      isPublic: true,
+    },
+  });
+
+  // If there are no public collections, return null
+  if (publicCollections.length === 0) {
+    return null;
+  }
+
+  // Select a random collection
+  const randomCollection =
+    publicCollections[Math.floor(Math.random() * publicCollections.length)];
+
+  // Get all images in the collection
+  const images = await prisma.image.findMany({
+    where: {
+      collectionId: randomCollection.id,
+    },
+  });
+
+  // If there are no images in the collection, return null
+  if (images.length === 0) {
+    return null;
+  }
+
+  // Select a random image
+  const randomImage = images[Math.floor(Math.random() * images.length)];
+
+  return randomImage;
+};
+
 export const updateImage = async (
   id: string,
   updatedData: any

@@ -4,6 +4,7 @@ import {
   getCollectionBySlug,
   getNumberImageOfCollection,
   getFirstImagesOfCollectionId,
+  updateCollection,
 } from "../services/prisma-crud/collection";
 import { getImagesWithPromptByCollectionId } from "../services/prisma-crud/image";
 
@@ -49,7 +50,35 @@ router.get("/:slug", (req, res) => {
 
     const images = await getImagesWithPromptByCollectionId(collection.id);
 
-    res.render("collection", { images, collection: collection.name });
+    res.render("collection", { images, collection });
+  })();
+});
+
+// Route to update a collection
+router.post("/:id", (req, res) => {
+  void (async () => {
+    const { id } = req.params;
+
+    const isPublicStatus = req.body.isPublic;
+    console.log("isPublicStatus", isPublicStatus);
+
+    // Get name and isPublic from the req.params, but they may not exist
+    const name: string | null = req.body.name;
+    const isPublic: boolean | null = req.body.isPublic;
+
+    // create a updatedData object with only the data that is not null
+    const updatedData: any = {};
+    if (name != null) {
+      updatedData.name = name;
+    }
+    if (isPublic != null) {
+      updatedData.isPublic = isPublic;
+    }
+
+    console.log("updatedData", updatedData);
+
+    await updateCollection(id, updatedData);
+    res.sendStatus(200);
   })();
 });
 

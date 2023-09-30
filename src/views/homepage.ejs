@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style/homepage.css" />
+    <title>Image Generation</title>
+  </head>
+
+  <body>
+    <div
+      class="overlay-navigation overlay-slide-up"
+      style="opacity: 0; display: none; transform: translateX(0px)"
+    >
+      <nav role="navigation">
+        <ul>
+          <li
+            style="opacity: 0; display: none; transform-origin: 50% 50% 0px"
+            class=""
+          >
+            <a href="/" data-content="The beginning" class="" style="opacity: 0"
+              >Home</a
+            >
+          </li>
+          <li
+            style="opacity: 0; display: none; transform-origin: 50% 50% 0px"
+            class=""
+          >
+            <a
+              href="https://thomas.ritaine.com"
+              data-content="Curious ? Visit my Portfolio : thomas.ritaine.com"
+              class=""
+              style="opacity: 0"
+              >About</a
+            >
+          </li>
+          <li
+            style="opacity: 0; display: none; transform-origin: 50% 50% 0px"
+            class=""
+          >
+            <a
+              href="/generate"
+              data-content="Enter the playground"
+              class=""
+              style="opacity: 0"
+              >Generate Images</a
+            >
+          </li>
+          <li
+            style="opacity: 0; display: none; transform-origin: 50% 50% 0px"
+            class=""
+          >
+            <a
+              href="/collection"
+              data-content="See all Collections"
+              class=""
+              style="opacity: 0"
+              >Collections</a
+            >
+          </li>
+          <li
+            style="opacity: 0; display: none; transform-origin: 50% 50% 0px"
+            class=""
+          >
+            <a
+              href="mailto:thomas@ritaine.com"
+              data-content="All your questions answered via mail : thomas@ritaine.com"
+              class=""
+              style="opacity: 0"
+              >Contact me</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <section
+      class="home"
+      style="
+        background-image: url(<%=image==null?'https://picsum.photos/1024':`/${image.path}`%>);
+      "
+    >
+      <a href="https://thomas.ritaine.com" target="_blank"
+        >Visit my Portfolio</a
+      >
+      <div class="open-overlay" style="pointer-events: auto">
+        <span class="bar-top animate-out-top-bar"></span>
+        <span class="bar-middle animate-out-middle-bar"></span>
+        <span class="bar-bottom animate-out-bottom-bar"></span>
+      </div>
+    </section>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.ui.min.js"></script>
+    <script src="/script/homepage.js"></script>
+  </body>
+</html>

@@ -78,6 +78,10 @@ export const updateCollection = async (
   id: string,
   updatedData: any
 ): Promise<Collection> => {
+  // If the name is updated, update the slug too
+  if (updatedData.name != null) {
+    updatedData.slug = slugify(updatedData.name);
+  }
   return await prisma.collection.update({
     where: { id },
     data: updatedData,
