@@ -106,7 +106,25 @@ export const getImagesWithPromptByCollectionId = async (
   return images;
 };
 
-export const getRandomImage = async (): Promise<Image | null> => {
+export const getFavouriteImagesWithPrompt = async (): Promise<
+  Image[] | null
+> => {
+  const images = await prisma.image.findMany({
+    where: {
+      isFavourite: true,
+    },
+    include: {
+      generationInfo: {
+        select: {
+          prompt: true,
+        },
+      },
+    },
+  });
+  return images;
+};
+
+export const getRandomPublicImage = async (): Promise<Image | null> => {
   // Get all public collections
   const publicCollections = await prisma.collection.findMany({
     where: {
@@ -139,6 +157,34 @@ export const getRandomImage = async (): Promise<Image | null> => {
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
   return randomImage;
+};
+
+export const getFirstImagesOfFavourites = async (): Promise<{
+  path: string;
+} | null> => {
+  const result = await prisma.image.findFirst({
+    where: {
+      isFavourite: true,
+    },
+    select: {
+      path: true,
+    },
+  });
+  return result != null ? { path: result.path } : null;
+};
+
+export const getImages = async (): Promise<{
+  path: string;
+} | null> => {
+  const result = await prisma.image.findFirst({
+    where: {
+      isFavourite: true,
+    },
+    select: {
+      path: true,
+    },
+  });
+  return result != null ? { path: result.path } : null;
 };
 
 export const updateImage = async (

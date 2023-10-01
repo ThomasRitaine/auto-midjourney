@@ -7,7 +7,7 @@ import * as cors from "cors";
 import collectionRouter from "./routes/collection";
 import imageRouter from "./routes/image";
 import userRouter from "./routes/user";
-import { getRandomImage } from "./services/prisma-crud/image";
+import { getRandomPublicImage } from "./services/prisma-crud/image";
 
 const app = express();
 const port = 3000;
@@ -27,7 +27,7 @@ app.use("/image", express.static(path.join(__dirname, "..", "image")));
 // Home page
 app.get("/", (req, res) => {
   void (async () => {
-    const randomImage = await getRandomImage();
+    const randomImage = await getRandomPublicImage();
     res.render("homepage", { image: randomImage });
   })();
 });

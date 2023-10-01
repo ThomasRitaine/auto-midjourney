@@ -1,9 +1,34 @@
 import express from "express";
-import { deleteImage } from "../services/prisma-crud/image";
+import {
+  deleteImage,
+  getImageById,
+  updateImage,
+} from "../services/prisma-crud/image";
 
 const router = express.Router();
 
-router.delete("/image/:id", (req, res) => {
+router.post("/:id/toggle-favourite", (req, res) => {
+  void (async () => {
+    const { id } = req.params;
+    try {
+      const image = await getImageById(id);
+      if (image == null) {
+        throw new Error("Image not found.");
+      }
+      await updateImage(id, { isFavourite: !image.isFavourite });
+      res.status(200).send({
+        success: true,
+        message: `Image ${id} ${
+          image.isFavourite ? "removed from" : "added to"
+        } favourite successfully.`,
+      });
+    } catch (error) {
+      res.status(404).send({ success: false, message: "Image not found." });
+    }
+  })();
+});
+
+router.delete("/:id", (req, res) => {
   void (async () => {
     const { id } = req.params;
     try {

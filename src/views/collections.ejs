@@ -9,6 +9,28 @@
 
 <body>
     <section class="Grid">
+
+        <div class="Grid-row">
+            <a class="Card" onclick="openGallery(favourites)" id="card-0">
+                <div class="Card-thumb">
+                    <div class="Card-shadow"></div>
+                    <div class="Card-shadow"></div>
+                    <div class="Card-shadow"></div>
+                    <div
+                        class="Card-image"
+                        style="background-image: url(<%= firstImageOfCollection.favourites %>)"
+                    ></div>
+                </div>
+                <div class="Card-title"><span>Favourites</span></div>
+                <div class="Card-explore"><span>Browse all <%= numberImagesInCollection.favourites %> images</span></div>
+                <button onclick="window.location.href='/collection/favourites'" class=  "Card-button">view more</button>
+            </a>
+        </div>
+
+        <br />
+        <hr />
+        <br /><br />
+
         <% 
         let counter = 0;
         collections.forEach((collection, index) => {
