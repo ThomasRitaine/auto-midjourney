@@ -144,7 +144,7 @@ body {
 }
 
 .btn-favourite {
-  background-color: #007bff; /* Default blue color for the prompt button */
+  background-color: #ff69b4; /* Default blue color for the prompt button */
   color: white;
 }
 
@@ -162,7 +162,7 @@ body {
 }
 
 .btn-favourite:hover {
-  background-color: #0056b3; /* Slightly darker blue on hover */
+  background-color: #d54f96; /* Slightly darker blue on hover */
 }
 
 .btn-delete:hover {
