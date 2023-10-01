@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import { compareSync, genSaltSync, hashSync } from "bcryptjs";
 
 /**
  * Hash a given password using bcrypt.
@@ -11,13 +11,9 @@ import bcrypt from "bcrypt";
  * const hashedPassword = await hashPassword("plaintext_password");
  */
 export const hashPassword = async (password: string): Promise<string> => {
-  try {
-    const saltRounds = 10;
-    const hash = await bcrypt.hash(password, saltRounds);
-    return hash;
-  } catch (err: unknown) {
-    throw new Error(err as string);
-  }
+  const salt = genSaltSync(10);
+  const hash = hashSync(password, salt);
+  return hash;
 };
 
 /**
@@ -35,11 +31,11 @@ export const hashPassword = async (password: string): Promise<string> => {
  * }
  */
 export const comparePassword = async (
-  hash: string,
-  password: string
+  password: string,
+  hash: string
 ): Promise<boolean> => {
   try {
-    return await bcrypt.compare(password, hash);
+    return compareSync(password, hash);
   } catch (err: unknown) {
     throw new Error(err as string);
   }
@@ -60,7 +56,7 @@ export const comparePassword = async (
  * const token = await generateToken(32);  // Returns a unique token of length 20.
  */
 export const generateToken = async (length: number): Promise<string> => {
-  const salt = await bcrypt.genSalt(length);
-  const hash = await bcrypt.hash(String(Date.now()), salt);
+  const salt = genSaltSync(length);
+  const hash = hashSync(String(Date.now()), salt);
   return hash.slice(-length);
 };

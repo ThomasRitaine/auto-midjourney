@@ -34,11 +34,11 @@ router.get("/login", (req: express.Request, res: express.Response) => {
 router.post("/login", (req: express.Request, res: express.Response) => {
   void (async () => {
     try {
-      const user = await getUserByUsernameOrEmail(req.body.username ?? "");
+      const user = await getUserByUsernameOrEmail(req.body.login ?? "");
 
       const isPasswordCorrect = await comparePassword(
-        user?.password ?? "",
-        req.body.password ?? ""
+        req.body.password ?? "",
+        user?.password ?? ""
       );
 
       if (user == null || !isPasswordCorrect) {
@@ -84,6 +84,13 @@ router.get("/signup", (req: express.Request, res: express.Response) => {
  */
 router.post("/signup", (req: express.Request, res: express.Response) => {
   void (async () => {
+    const userToken: string = req.body.token;
+
+    if (userToken !== process.env.REGISTRATION_TOKEN) {
+      res.status(403).send("Invalid token.");
+      return;
+    }
+
     try {
       const hashedPassword: any = await hashPassword(req.body.password);
       await createUser({
