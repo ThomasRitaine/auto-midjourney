@@ -34,3 +34,13 @@ model Image {
   generationInfoId String
   collectionId     String
 }
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  resetPasswordToken String?  @unique
+  resetPasswordExpiration  DateTime?
+  createdAt DateTime @default(now())
+}
