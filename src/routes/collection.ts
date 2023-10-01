@@ -5,8 +5,13 @@ import {
   getNumberImageOfCollection,
   getFirstImagesOfCollectionId,
   updateCollection,
+  getNumberImageFavourite,
 } from "../services/prisma-crud/collection";
-import { getImagesWithPromptByCollectionId } from "../services/prisma-crud/image";
+import {
+  getFavouriteImagesWithPrompt,
+  getFirstImagesOfFavourites,
+  getImagesWithPromptByCollectionId,
+} from "../services/prisma-crud/image";
 
 const router = express.Router();
 
@@ -21,6 +26,9 @@ router.get("/", (req, res) => {
         await getNumberImageOfCollection(collection.id);
     }
 
+    // Add the number of favourite images
+    numberImagesInCollection.favourites = await getNumberImageFavourite();
+
     // Get the first image of each collection
     const firstImageOfCollection: Record<string, string | null> = {};
     for (const collection of collections) {
@@ -29,11 +37,31 @@ router.get("/", (req, res) => {
       firstImageOfCollection[collection.id] = imagePath;
     }
 
+    // Add the first image of the favourite collection
+    const firstFavouriteImage = await getFirstImagesOfFavourites();
+    const firstFavouriteImagePath =
+      firstFavouriteImage != null ? firstFavouriteImage.path : null;
+    firstImageOfCollection.favourites = firstFavouriteImagePath;
+
     res.render("collections", {
       collections,
       numberImagesInCollection,
       firstImageOfCollection,
     });
+  })();
+});
+
+router.get("/favourites", (req, res) => {
+  void (async () => {
+    const collection = {
+      id: "favourites",
+      name: "Favourites",
+      slug: "favourites",
+    };
+
+    const images = await getFavouriteImagesWithPrompt();
+
+    res.render("collection", { images, collection });
   })();
 });
 

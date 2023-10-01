@@ -39,6 +39,7 @@ gallery.querySelectorAll(".gallery-item").forEach(function (item) {
     if (
       !event.target.classList.contains("btn-download") &&
       !event.target.classList.contains("btn-prompt") &&
+      !event.target.classList.contains("btn-favourite") &&
       !event.target.classList.contains("btn-delete")
     ) {
       item.classList.toggle("full");
@@ -78,10 +79,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const imageUrl = event.target
           .closest(".content")
           .querySelector("img").src;
-        const imageID = imageUrl.split("/").pop().split(".")[0]; // Extracting image ID from the URL
+        const imageId = imageUrl.split("/").pop().split(".")[0]; // Extracting image ID from the URL
 
         try {
-          const response = await fetch(`/image/${imageID}`, {
+          const response = await fetch(`/image/${imageId}`, {
             method: "DELETE",
           });
 
@@ -97,6 +98,37 @@ document.addEventListener("DOMContentLoaded", function () {
             "Failed to delete the image. Please check your connection and try again."
           );
         }
+      }
+    });
+  });
+
+  // Add event listener for favourite
+  const favouriteButtons = document.querySelectorAll(".btn-favourite");
+  favouriteButtons.forEach((btn) => {
+    btn.addEventListener("click", async function (event) {
+      const imageUrl = event.target
+        .closest(".content")
+        .querySelector("img").src;
+      const imageId = imageUrl.split("/").pop().split(".")[0]; // Extracting image ID from the URL
+      const newStatus = btn.dataset.isFavourite !== "true";
+
+      try {
+        const response = await fetch(`/image/${imageId}/toggle-favourite`, {
+          method: "POST",
+        });
+
+        if (response.status === 200) {
+          // Successfully deleted from server, now remove from the DOM
+          btn.innerHTML = newStatus
+            ? "Remove from Favour"
+            : "Add to Favourites";
+          btn.dataset.isFavourite = newStatus;
+        } else {
+          alert("Error adding the image to favourites. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error sending DELETE request:", error);
+        alert("Error adding the image to favourites. Please try again.");
       }
     });
   });

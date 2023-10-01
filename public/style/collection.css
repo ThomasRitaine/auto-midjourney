@@ -128,9 +128,7 @@ body {
   display: flex;
 }
 
-.btn-download,
-.btn-prompt,
-.btn-delete {
+.image-actions button {
   padding: 5px 10px;
   cursor: pointer;
 }
@@ -145,6 +143,11 @@ body {
   color: white;
 }
 
+.btn-favourite {
+  background-color: #007bff; /* Default blue color for the prompt button */
+  color: white;
+}
+
 .btn-delete {
   background-color: red;
   color: white;
@@ -155,6 +158,10 @@ body {
 }
 
 .btn-prompt:hover {
+  background-color: #0056b3; /* Slightly darker blue on hover */
+}
+
+.btn-favourite:hover {
   background-color: #0056b3; /* Slightly darker blue on hover */
 }
 

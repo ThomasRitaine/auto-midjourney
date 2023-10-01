@@ -15,6 +15,7 @@ model GenerationInfo {
   images       Image[]
   collection   Collection @relation(fields: [collectionId], references: [id])
   collectionId String
+  createdAt DateTime @default(now())
 }
 
 model Collection {
@@ -24,13 +25,16 @@ model Collection {
   images         Image[]
   isPublic       Boolean          @default(false)
   GenerationInfo GenerationInfo[]
+  createdAt DateTime @default(now())
 }
 
 model Image {
   id               String         @id @default(uuid())
   path             String         @unique
+  isFavourite      Boolean        @default(false)
   generationInfo   GenerationInfo @relation(fields: [generationInfoId], references: [id])
   collection       Collection     @relation(fields: [collectionId], references: [id])
   generationInfoId String
   collectionId     String
+  createdAt DateTime @default(now())
 }
