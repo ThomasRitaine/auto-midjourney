@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import { createGenerationInfo } from "../services/prisma-crud/generationInfo";
 import {
   createCollection,
@@ -6,14 +6,15 @@ import {
 } from "../services/prisma-crud/collection";
 import generateAndDownload from "../midjourney/generateAndDownload";
 import { type Collection, type GenerationInfo } from "@prisma/client";
+import authenticateJwt from "../middlewares/authenticateJWT";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", authenticateJwt, (req: Request, res: Response) => {
   res.render("generate");
 });
 
-router.post("/", (req, res) => {
+router.post("/", authenticateJwt, (req: Request, res: Response) => {
   void (async () => {
     const userToken: string = req.body.token;
 

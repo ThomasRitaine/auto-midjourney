@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import {
   getAllCollections,
   getCollectionBySlug,
@@ -12,10 +12,10 @@ import {
   getFirstImagesOfFavourites,
   getImagesWithPromptByCollectionId,
 } from "../services/prisma-crud/image";
+import authenticateJWT from "../middlewares/authenticateJWT";
 
 const router = express.Router();
-
-router.get("/", (req, res) => {
+router.get("/", authenticateJWT, (req: Request, res: Response) => {
   void (async () => {
     const collections = await getAllCollections();
 
@@ -51,7 +51,7 @@ router.get("/", (req, res) => {
   })();
 });
 
-router.get("/favourites", (req, res) => {
+router.get("/favourites", authenticateJWT, (req: Request, res: Response) => {
   void (async () => {
     const collection = {
       id: "favourites",
@@ -65,7 +65,7 @@ router.get("/favourites", (req, res) => {
   })();
 });
 
-router.get("/:slug", (req, res) => {
+router.get("/:slug", (req: Request, res: Response) => {
   void (async () => {
     const { slug } = req.params;
     const collection = await getCollectionBySlug(slug);
@@ -83,7 +83,7 @@ router.get("/:slug", (req, res) => {
 });
 
 // Route to update a collection
-router.post("/:id", (req, res) => {
+router.post("/:id", (req: Request, res: Response) => {
   void (async () => {
     const { id } = req.params;
 
