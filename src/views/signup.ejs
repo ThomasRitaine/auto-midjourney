@@ -11,14 +11,7 @@
     <h1>Signup form</h1>
     <div>
       <form class="form" action="/user/signup" method="post">
-        <div class="admin">
-          <h2>Admin</h2>
-          <label for="token">Token</label>
-          <input type="password" name="token" id="token" required />
-        </div>
-
         <div class="user-info">
-          <h2>User info</h2>
           <label for="username">Username</label>
           <input type="text" name="username" id="username" required />
 
@@ -27,6 +20,32 @@
 
           <label for="password">Password</label>
           <input type="password" name="password" id="password" required />
+
+          <label>Roles:</label>
+          <div>
+            <input
+              type="checkbox"
+              name="roles[]"
+              value="generate:slow"
+              id="generate-slow"
+            />
+            <label for="generate-slow">Generate Slow</label>
+          </div>
+
+          <div>
+            <input
+              type="checkbox"
+              name="roles[]"
+              value="generate:fast"
+              id="generate-fast"
+            />
+            <label for="generate-fast">Generate Fast</label>
+          </div>
+
+          <div>
+            <input type="checkbox" name="roles[]" value="admin" id="admin" />
+            <label for="admin">Admin</label>
+          </div>
         </div>
 
         <input type="submit" id="submit" value="Register" />

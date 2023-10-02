@@ -43,6 +43,7 @@ model User {
   id        String   @id @default(uuid())
   username  String   @unique
   email     String   @unique
+  roles     String[] @default(["user"])
   password  String
   resetPasswordToken String?  @unique
   resetPasswordExpiration  DateTime?

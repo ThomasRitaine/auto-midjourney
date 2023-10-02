@@ -13,8 +13,6 @@ services:
       - DATABASE_USER_NAME=webapp
       - DATABASE_USER_PASSWORD=webapp-password
       - DATABASE_URL=postgresql://webapp:webapp-password@database:5432/auto-midjourney?schema=public
-      - GENERATION_TOKEN=token
-      - REGISTRATION_TOKEN=token
       - JWT_SECRET=token
     ports:
       - "80:3000"

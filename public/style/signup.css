@@ -64,3 +64,23 @@ input[type="submit"] {
 input[type="submit"]:hover {
   background-color: #2980b9;
 }
+
+/* Checkbox Styles */
+input[type="checkbox"] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Grouping the checkbox and its label for better spacing */
+.form .user-info div {
+  margin-bottom: 10px;
+}
+
+/* Styling the checkbox labels to match the other labels */
+input[type="checkbox"] + label {
+  display: inline-block;
+  font-size: 14px;
+  margin-bottom: 0; /* Overwriting previous label margin */
+  color: #666;
+  cursor: pointer;
+}
