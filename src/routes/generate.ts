@@ -5,7 +5,11 @@ import {
   getCollectionByNameOrSlug,
 } from "../services/prisma-crud/collection";
 import generateAndDownload from "../midjourney/generateAndDownload";
-import { type Collection, type GenerationInfo } from "@prisma/client";
+import {
+  type User,
+  type Collection,
+  type GenerationInfo,
+} from "@prisma/client";
 import authenticateJwt from "../middlewares/authenticateJWT";
 import requireRole from "../middlewares/requireRole";
 
@@ -14,18 +18,39 @@ const router = express.Router();
 router.get(
   "/",
   authenticateJwt,
-  requireRole("generate:slow", "genrate:fast"),
+  requireRole("generate:relax", "genrate:fast"),
   (req: Request, res: Response) => {
-    res.render("generate");
+    const user: User = req.user as User;
+    const userRoles = user.roles;
+    // If admin, add both roles
+    if (userRoles.includes("admin")) {
+      userRoles.push("generate:relax", "generate:fast");
+    }
+    res.render("generate", { userRoles });
   }
 );
 
 router.post(
   "/",
   authenticateJwt,
-  requireRole("generate:slow", "genrate:fast"),
+  requireRole("generate:relax", "genrate:fast"),
   (req: Request, res: Response) => {
     void (async () => {
+      const user = req.user as User;
+
+      const defaultCollection: string = req.body.defaultCollection;
+
+      // Get the right generation speed based on the user's roles and request
+      let generationSpeed: "FAST" | "RELAX";
+      if (
+        user.roles.includes("generate:relax") &&
+        !user.roles.includes("generate:fast")
+      ) {
+        generationSpeed = "RELAX";
+      } else {
+        generationSpeed = req.body.speed === "FAST" ? "FAST" : "RELAX";
+      }
+
       const prompts = Array.isArray(req.body.prompt)
         ? req.body.prompt
         : [req.body.prompt];
@@ -37,8 +62,6 @@ router.post(
       const collectionsName = Array.isArray(req.body.collection)
         ? req.body.collection
         : [req.body.collection];
-
-      const defaultCollection: string = req.body.defaultCollection;
 
       const collections: Collection[] = [];
 
@@ -72,6 +95,7 @@ router.post(
               id: collections[index].id,
             },
           },
+          speed: generationSpeed,
         });
         generationInfoGroup.push(generationInfo);
       }

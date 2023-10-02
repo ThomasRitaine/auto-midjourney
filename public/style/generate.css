@@ -83,3 +83,33 @@ hr {
   border-top: 1px solid #ddd;
   margin: 20px 0;
 }
+
+/* Global Section */
+.global-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Generation Speed Radio Buttons */
+.generation-speed {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.generation-speed label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.generation-speed div {
+  display: flex;
+  align-items: center;
+  margin-right: 20px; /* Add space between radio button groups */
+}
+
+input[type="radio"] {
+  margin-right: 5px; /* Space between the radio button and its label */
+  cursor: pointer;
+}

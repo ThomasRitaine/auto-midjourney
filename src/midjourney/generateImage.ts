@@ -10,6 +10,14 @@ async function generateImage(
   const images: Image[] = [];
 
   for (let i = 0; i < generationInfo.repeat; i++) {
+    // Set the client in the right speed mode
+    if (generationInfo.speed === "FAST") {
+      await client.Fast();
+    } else {
+      await client.Relax();
+    }
+
+    // Generate the image
     const imagineMJMessage = await client.Imagine(
       generationInfo.prompt,
       (uri: string, progress: string) => {

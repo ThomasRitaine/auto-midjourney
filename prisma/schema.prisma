@@ -8,12 +8,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum GenerationSpeed {
+  RELAX
+  FAST
+}
+
 model GenerationInfo {
   id           String     @id @default(uuid())
   prompt       String
   repeat       Int
   images       Image[]
   collection   Collection @relation(fields: [collectionId], references: [id])
+  speed        GenerationSpeed @default(RELAX)
   collectionId String
   createdAt DateTime @default(now())
 }

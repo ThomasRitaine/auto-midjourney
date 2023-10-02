@@ -33,15 +33,36 @@
   <body>
     <h1>Image Generation</h1>
     <form action="/generate" method="post">
-      <label>Default Collection:</label>
-      <input
-        type="text"
-        name="defaultCollection"
-        placeholder="Set default collection value"
-      />
-      <br />
-      <hr />
-      <br />
+      <div class="global-section">
+        <div class="generation-speed">
+          <label>Generation Speed:</label>
+          <% if (userRoles.includes("generate:relax")) { %>
+          <div>
+            <input
+              type="radio"
+              name="generationSpeed"
+              value="RELAX"
+              id="relax"
+              checked
+            />
+            <label for="relax">Relax</label>
+          </div>
+          <% } %> <% if (userRoles.includes("generate:fast")) { %>
+          <div>
+            <input type="radio" name="generationSpeed" value="FAST" id="fast" />
+            <label for="fast">Fast</label>
+          </div>
+          <% } %>
+        </div>
+        <div class="default-collection">
+          <label>Default Collection:</label>
+          <input
+            type="text"
+            name="defaultCollection"
+            placeholder="Set default collection value"
+          />
+        </div>
+      </div>
       <div id="promptContainer">
         <!-- Initial prompt fields -->
         <div class="prompt-box">
