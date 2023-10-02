@@ -14,14 +14,16 @@ enum GenerationSpeed {
 }
 
 model GenerationInfo {
-  id           String     @id @default(uuid())
+  id           String          @id @default(uuid())
   prompt       String
   repeat       Int
   images       Image[]
-  collection   Collection @relation(fields: [collectionId], references: [id])
-  speed        GenerationSpeed @default(RELAX)
+  collection   Collection      @relation(fields: [collectionId], references: [id])
   collectionId String
-  createdAt DateTime @default(now())
+  user         User            @relation(fields: [userId], references: [id])
+  userId       String          @default("")
+  speed        GenerationSpeed @default(RELAX)
+  createdAt    DateTime        @default(now())
 }
 
 model Collection {
@@ -31,7 +33,10 @@ model Collection {
   images         Image[]
   isPublic       Boolean          @default(false)
   GenerationInfo GenerationInfo[]
-  createdAt DateTime @default(now())
+  user           User             @relation(fields: [userId], references: [id])
+  userId         String           @default("")
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt
 }
 
 model Image {
@@ -42,16 +47,19 @@ model Image {
   collection       Collection     @relation(fields: [collectionId], references: [id])
   generationInfoId String
   collectionId     String
-  createdAt DateTime @default(now())
+  createdAt        DateTime       @default(now())
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  email     String   @unique
-  roles     String[] @default(["user"])
-  password  String
-  resetPasswordToken String?  @unique
-  resetPasswordExpiration  DateTime?
-  createdAt DateTime @default(now())
+  id                      String           @id @default(uuid())
+  username                String           @unique
+  email                   String           @unique
+  roles                   String[]         @default(["user"])
+  password                String
+  collections             Collection[]
+  generationInfo          GenerationInfo[]
+  resetPasswordToken      String?          @unique
+  resetPasswordExpiration DateTime?
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @default(now()) @updatedAt
 }

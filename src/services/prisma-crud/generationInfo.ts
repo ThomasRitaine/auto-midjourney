@@ -4,9 +4,21 @@ const prisma = new PrismaClient();
 
 // GenerationInfo CRUD operations
 export const createGenerationInfo = async (
-  infoData: any
+  prompt: string,
+  repeat: number,
+  collectionId: string,
+  userId: string,
+  speed: "FAST" | "RELAX"
 ): Promise<GenerationInfo> => {
-  return await prisma.generationInfo.create({ data: infoData });
+  return await prisma.generationInfo.create({
+    data: {
+      prompt,
+      repeat,
+      collection: { connect: { id: collectionId } },
+      user: { connect: { id: userId } },
+      speed,
+    },
+  });
 };
 
 export const getGenerationInfoById = async (

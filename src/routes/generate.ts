@@ -72,7 +72,7 @@ router.post(
         let collection = await getCollectionByNameOrSlug(collectionName);
         if (collection == null) {
           try {
-            collection = await createCollection(collectionName);
+            collection = await createCollection(collectionName, user.id);
           } catch (error) {
             console.error(error);
             res.status(403).send("Collection already exists.");
@@ -87,16 +87,13 @@ router.post(
 
       for (let index = 0; index < prompts.length; index++) {
         const prompt = prompts[index];
-        const generationInfo = await createGenerationInfo({
+        const generationInfo = await createGenerationInfo(
           prompt,
-          repeat: parseInt(repeats[index]),
-          collection: {
-            connect: {
-              id: collections[index].id,
-            },
-          },
-          speed: generationSpeed,
-        });
+          parseInt(repeats[index]),
+          collections[index].id,
+          user.id,
+          generationSpeed
+        );
         generationInfoGroup.push(generationInfo);
       }
 

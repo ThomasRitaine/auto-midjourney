@@ -4,10 +4,21 @@ import slugify from "../../util/slugify";
 
 const prisma = new PrismaClient();
 
-export const createCollection = async (name: string): Promise<Collection> => {
+export const createCollection = async (
+  name: string,
+  userId: string
+): Promise<Collection> => {
   const slug = slugify(name);
   const newCollection = await prisma.collection.create({
-    data: { name, slug },
+    data: {
+      name,
+      slug,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
   });
   const folder = `image/${slug}`;
   await mkdir(folder, { recursive: true });
