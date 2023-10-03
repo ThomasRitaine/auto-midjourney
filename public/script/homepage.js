@@ -1,9 +1,9 @@
 $(".open-overlay").click(function () {
   $(".open-overlay").css("pointer-events", "none");
-  var overlay_navigation = $(".overlay-navigation"),
-    top_bar = $(".bar-top"),
-    middle_bar = $(".bar-middle"),
-    bottom_bar = $(".bar-bottom");
+  const overlay_navigation = $(".overlay-navigation");
+    const top_bar = $(".bar-top");
+    const middle_bar = $(".bar-middle");
+    const bottom_bar = $(".bar-bottom");
 
   overlay_navigation.toggleClass("overlay-active");
   if (overlay_navigation.hasClass("overlay-active")) {
