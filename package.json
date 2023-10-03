@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/app.ts",
-    "lint": "eslint . --fix",
+    "lint": "eslint **/*.ts --fix",
     "prisma:generate": "npx prisma generate",
     "prod": "ts-node --transpile-only src/app.ts"
   },

@@ -2,3 +2,4 @@ image
 node_modules
 prisma
 .env
+public
