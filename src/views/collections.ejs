@@ -10,6 +10,9 @@
 <body>
     <section class="Grid">
 
+        <% if (userLoggedIn) { %>
+        <h2>Collection of your favourite Images</h2>
+        <br />
         <div class="Grid-row">
             <a class="Card" onclick="openGallery(favourites)" id="card-0">
                 <div class="Card-thumb">
@@ -26,18 +29,68 @@
                 <button onclick="window.location.href='/collection/favourites'" class=  "Card-button">view more</button>
             </a>
         </div>
-
         <br />
         <hr />
-        <br /><br />
+        <br />
+        
 
-        <% 
+
+        <h2>Your private Collections</h2>
+        <br />
+        <%
         let counter = 0;
-        collections.forEach((collection, index) => {
-            if (counter % 3 === 0) { 
+        userCollections.forEach((collection, index) => {
+            if (counter % 3 === 0) {
         %>
                 <div class="Grid-row">
+        <%
+            }
+        %>
+            <a class="Card" onclick="openGallery(<%= collection.id %>)" id="card-<%= index+1 %>">
+                <div class="Card-thumb">
+                    <div class="Card-shadow"></div>
+                    <div class="Card-shadow"></div>
+                    <div class="Card-shadow"></div>
+                    <div
+                        class="Card-image"
+                        style="background-image: url(<%= firstImageOfCollection[collection.id] %>)"
+                    ></div>
+                </div>
+                <div class="Card-title"><span><%= collection.name %></span></div>
+                <div class="Card-explore"><span>Browse all <%= numberImagesInCollection[collection.id] %> images</span></div>
+                <button onclick="window.location.href='/collection/<%= collection.slug %>'" class=  "Card-button">view more</button>
+            </a>
+        <%
+            counter++;
+            if (counter % 3 === 0) { 
+        %>
+                </div>
+        <%
+            }
+        });
+
+        // Check if there are any remaining cards that need to be wrapped in a closing div tag
+        if (counter % 3 !== 0) { 
+        %>
+                </div>
+        <%
+            } 
+        %>
+        <br />
+        <hr />
+        <br />
+
+        <% } // End of condition if User is logged in %>
+
+        <h2>Public Collections</h2>
+        <br />
         <% 
+        let counter = 0;
+        publicCollections.forEach((collection, index) => {
+            if (counter % 3 === 0) {
+        %>
+                <div class="Grid-row">
+        <%
             }
         %>
             <a class="Card" onclick="openGallery(<%= collection.id %>)" id="card-<%= index+1 %>">
@@ -70,6 +123,7 @@
         <% 
             } 
         %>
+        
     </section>
 </body>
 </html>

@@ -29,6 +29,27 @@ export const getAllCollections = async (): Promise<Collection[]> => {
   return await prisma.collection.findMany();
 };
 
+export const getUserCollections = async (
+  userId: string | null
+): Promise<Collection[]> => {
+  if (userId == null || userId === "") {
+    return [];
+  }
+  return await prisma.collection.findMany({
+    where: {
+      userId,
+    },
+  });
+};
+
+export const getPublicCollections = async (): Promise<Collection[]> => {
+  return await prisma.collection.findMany({
+    where: {
+      isPublic: true,
+    },
+  });
+};
+
 export const getCollectionByName = async (
   name: string
 ): Promise<Collection | null> => {

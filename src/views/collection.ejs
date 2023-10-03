@@ -15,7 +15,10 @@
 
     <h1>Collection : <%= collection.name %></h1>
 
-    <% if ( collection.id !== "favourites") { %>
+    <% // Do not display the "Make Public" button for the favourite collection,
+    // and if user does not own the collection %>
+    <!--  -->
+    <% if ( collection.id !== "favourites" && isUserOwner) { %>
     <button
       id="toggleVisibilityBtn"
       data-collection-id="<%= collection.id %>"
