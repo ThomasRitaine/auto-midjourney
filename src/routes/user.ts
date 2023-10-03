@@ -12,7 +12,7 @@ import {
   hashPassword,
 } from "../services/auth/password";
 import { sign } from "jsonwebtoken";
-import authenticateJWT from "../middlewares/authenticateJWT";
+import requireAuth from "../middlewares/requireAuth";
 import requireRole from "../middlewares/requireRole";
 
 const router = express.Router();
@@ -79,7 +79,7 @@ router.post("/login", (req: Request, res: Response) => {
  */
 router.get(
   "/signup",
-  authenticateJWT,
+  requireAuth,
   requireRole("admin"),
   (req: Request, res: Response) => {
     res.render("signup");
@@ -98,7 +98,7 @@ router.get(
  */
 router.post(
   "/signup",
-  authenticateJWT,
+  requireAuth,
   requireRole("admin"),
   (req: Request, res: Response) => {
     void (async () => {

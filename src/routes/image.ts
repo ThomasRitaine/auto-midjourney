@@ -4,13 +4,13 @@ import {
   getImageById,
   updateImage,
 } from "../services/prisma-crud/image";
-import authenticateJWT from "../middlewares/authenticateJWT";
+import requireAuth from "../middlewares/requireAuth";
 
 const router = express.Router();
 
 router.post(
   "/:id/toggle-favourite",
-  authenticateJWT,
+  requireAuth,
   (req: Request, res: Response) => {
     void (async () => {
       const { id } = req.params;
@@ -33,7 +33,7 @@ router.post(
   }
 );
 
-router.delete("/:id", authenticateJWT, (req: Request, res: Response) => {
+router.delete("/:id", requireAuth, (req: Request, res: Response) => {
   void (async () => {
     const { id } = req.params;
     try {

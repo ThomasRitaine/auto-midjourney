@@ -1,23 +1,45 @@
 import express, { type Request, type Response } from "express";
 import {
-  getAllCollections,
   getCollectionBySlug,
   getNumberImageOfCollection,
   getFirstImagesOfCollectionId,
   updateCollection,
   getNumberImageFavourite,
+  getUserCollections,
+  getPublicCollections,
 } from "../services/prisma-crud/collection";
 import {
   getFavouriteImagesWithPrompt,
   getFirstImagesOfFavourites,
   getImagesWithPromptByCollectionId,
 } from "../services/prisma-crud/image";
-import authenticateJWT from "../middlewares/authenticateJWT";
+import requireAuth from "../middlewares/requireAuth";
+import identifyUser from "../middlewares/identifyUser";
+import { type User } from "@prisma/client";
 
 const router = express.Router();
-router.get("/", authenticateJWT, (req: Request, res: Response) => {
+router.get("/", identifyUser, (req: Request, res: Response) => {
   void (async () => {
-    const collections = await getAllCollections();
+    const user = req.user as User | false;
+    // ternal operator to get the userId if user is not false, else null
+    const userId = user !== false ? user.id : null;
+    const userCollections = await getUserCollections(userId);
+    // Order the collection by updatedAt, the most recent first
+    userCollections.sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
+
+    // Get all public collections
+    const publicCollections = await getPublicCollections();
+    // Order the collection by updatedAt, the most recent first
+    publicCollections.sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
+
+    // Combine the two collections
+    const collections = [...userCollections, ...publicCollections];
 
     // Get the number of image in each collection
     const numberImagesInCollection: Record<string, number> = {};
@@ -44,14 +66,16 @@ router.get("/", authenticateJWT, (req: Request, res: Response) => {
     firstImageOfCollection.favourites = firstFavouriteImagePath;
 
     res.render("collections", {
-      collections,
+      userLoggedIn: user !== false,
+      userCollections,
+      publicCollections,
       numberImagesInCollection,
       firstImageOfCollection,
     });
   })();
 });
 
-router.get("/favourites", authenticateJWT, (req: Request, res: Response) => {
+router.get("/favourites", requireAuth, (req: Request, res: Response) => {
   void (async () => {
     const collection = {
       id: "favourites",
@@ -65,10 +89,13 @@ router.get("/favourites", authenticateJWT, (req: Request, res: Response) => {
   })();
 });
 
-router.get("/:slug", (req: Request, res: Response) => {
+router.get("/:slug", identifyUser, (req: Request, res: Response) => {
   void (async () => {
     const { slug } = req.params;
     const collection = await getCollectionBySlug(slug);
+    const user = req.user as User | false;
+    const userId = user !== false ? user.id : null;
+    const isUserOwner = collection != null && collection.userId === userId;
 
     // return 404 if the collection doesn't exist
     if (collection == null) {
@@ -78,7 +105,7 @@ router.get("/:slug", (req: Request, res: Response) => {
 
     const images = await getImagesWithPromptByCollectionId(collection.id);
 
-    res.render("collection", { images, collection });
+    res.render("collection", { images, collection, isUserOwner });
   })();
 });
 

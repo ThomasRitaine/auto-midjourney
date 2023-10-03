@@ -10,14 +10,14 @@ import {
   type Collection,
   type GenerationInfo,
 } from "@prisma/client";
-import authenticateJwt from "../middlewares/authenticateJWT";
+import requireAuth from "../middlewares/requireAuth";
 import requireRole from "../middlewares/requireRole";
 
 const router = express.Router();
 
 router.get(
   "/",
-  authenticateJwt,
+  requireAuth,
   requireRole("generate:relax", "genrate:fast"),
   (req: Request, res: Response) => {
     const user: User = req.user as User;
@@ -32,7 +32,7 @@ router.get(
 
 router.post(
   "/",
-  authenticateJwt,
+  requireAuth,
   requireRole("generate:relax", "genrate:fast"),
   (req: Request, res: Response) => {
     void (async () => {
