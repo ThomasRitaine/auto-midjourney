@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -48,10 +48,11 @@
             <% }; if ( isUserLoggedIn ) { %>
             <button
               class="btn-favourite"
-              data-is-favourite="<%= image.isFavourite %>"
+              data-is-favourite="<%= isFavourite[image.id] %>"
             >
-              <%= image.isFavourite ? 'Remove from Favour' : 'Add to Favourites'
-              %>
+              <% const isFav = isFavourite[image.id] %>
+              <!--  -->
+              <%= isFav ? 'Remove from Favourites' : 'Add to Favourites' %>
             </button>
             <% }; if ( isUserGenerator[image.id] ) { %>
             <button class="btn-delete">Delete</button>

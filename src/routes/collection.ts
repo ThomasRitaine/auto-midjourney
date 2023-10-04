@@ -9,7 +9,7 @@ import {
 } from "../services/prisma-crud/collection";
 import {
   getFavouriteImagesWithPrompt,
-  getImagesWithPromptByCollectionId,
+  getImagesByCollection,
   isImageGeneratedByUser,
 } from "../services/prisma-crud/image";
 import requireAuth from "../middlewares/requireAuth";
@@ -85,11 +85,13 @@ router.get("/favourites", requireAuth, (req: Request, res: Response) => {
 
     // For each image, determine if the user is the owner of the image, and put the boolean in an array with the image id as key
     const isUserGenerator: Record<string, boolean> = {};
+    const isFavourite: Record<string, boolean> = {};
     for (const image of images ?? []) {
       isUserGenerator[image.id] = await isImageGeneratedByUser(
         image.id,
         user.id
       );
+      isFavourite[image.id] = true;
     }
 
     res.render("collection", {
@@ -119,7 +121,7 @@ router.get("/:slug", identifyUser, (req: Request, res: Response) => {
       return;
     }
 
-    const images = await getImagesWithPromptByCollectionId(collection.id);
+    const images = await getImagesByCollection(collection.id, true, true);
 
     // For each image, determine if the user is the owner of the image, and put the boolean in an array with the image id as key
     const isUserGenerator: Record<string, boolean> = {};
@@ -128,11 +130,20 @@ router.get("/:slug", identifyUser, (req: Request, res: Response) => {
         collection != null && collection.userId === userId;
     }
 
+    // For each image, determine if the user has that image in its favourites, and put the boolean in an array with the image id as key
+    const isFavourite: Record<string, boolean> = {};
+    for (const image of images ?? []) {
+      isFavourite[image.id] = image.favouratedByUser.some(
+        (user) => user.id === userId
+      );
+    }
+
     res.render("collection", {
-      images,
-      collection,
       isUserLoggedIn,
+      collection,
+      images,
       isUserGenerator, // Array of [imageId: boolean] where boolean is true if the user is the generator of the image
+      isFavourite, // Array of [imageId: boolean] where boolean is true if the user is the generator of the image
     });
   })();
 });

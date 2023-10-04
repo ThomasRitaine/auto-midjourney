@@ -42,7 +42,6 @@ model Collection {
 model Image {
   id               String         @id @default(uuid())
   path             String         @unique
-  isFavourite      Boolean        @default(false)
   generationInfo   GenerationInfo @relation(fields: [generationInfoId], references: [id])
   collection       Collection     @relation(fields: [collectionId], references: [id])
   favouratedByUser User[]

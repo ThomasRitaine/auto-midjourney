@@ -1,4 +1,9 @@
-import { type GenerationInfo, type Image, PrismaClient } from "@prisma/client";
+import {
+  type GenerationInfo,
+  type Image,
+  PrismaClient,
+  type Prisma,
+} from "@prisma/client";
 import fs from "fs";
 import { mkdir } from "fs/promises";
 import sharp from "sharp";
@@ -122,20 +127,35 @@ export const getImagesByCollectionId = async (
   return collection.images;
 };
 
-export const getImagesWithPromptByCollectionId = async (
-  collectionId: string
-): Promise<Image[] | null> => {
+export const getImagesByCollection = async (
+  collectionId: string,
+  includePrompt: boolean,
+  includeFavoratedBy: boolean
+): Promise<
+  | Array<
+      Image & { generationInfo: { prompt: string } } & {
+        favouratedByUser: Array<{ id: string }>;
+      }
+    >
+  | []
+> => {
+  // If includePrompt is true, include the prompt in the query
+  const include: Prisma.ImageInclude = {};
+  if (includePrompt) {
+    include.generationInfo = {
+      select: {
+        prompt: true,
+      },
+    };
+  }
+  if (includeFavoratedBy) {
+    include.favouratedByUser = true;
+  }
   const images = await prisma.image.findMany({
     where: {
       collectionId,
     },
-    include: {
-      generationInfo: {
-        select: {
-          prompt: true,
-        },
-      },
-    },
+    include,
   });
   return images;
 };
@@ -195,20 +215,6 @@ export const getRandomPublicImage = async (): Promise<Image | null> => {
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
   return randomImage;
-};
-
-export const getImages = async (): Promise<{
-  path: string;
-} | null> => {
-  const result = await prisma.image.findFirst({
-    where: {
-      isFavourite: true,
-    },
-    select: {
-      path: true,
-    },
-  });
-  return result != null ? { path: result.path } : null;
 };
 
 export const updateImage = async (
