@@ -15,14 +15,13 @@ services:
       - "traefik.enable=true"
 
       # Web App
-      - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_DOMAIN_NAME}`)"
-      - "traefik.http.routers.${APP_NAME}.middlewares=auth-http-auto-midjourney@file"
+      - "traefik.http.routers.${APP_NAME}.rule=Host(`${APP_DOMAIN_NAME_MIDJOURNEY}`,`${APP_DOMAIN_NAME_LABS}`)"
       - "traefik.http.routers.${APP_NAME}.service=${APP_NAME}"
       - "traefik.http.services.${APP_NAME}.loadbalancer.server.port=3000"
 
       # Prisma Studio
-      - "traefik.http.routers.prisma-${APP_NAME}.rule=Host(`prisma.${APP_DOMAIN_NAME}`)"
-      - "traefik.http.routers.prisma-${APP_NAME}.middlewares=auth-http-auto-midjourney@file"
+      - "traefik.http.routers.prisma-${APP_NAME}.rule=Host(`prisma.${APP_DOMAIN_NAME_MIDJOURNEY}`,`prisma.${APP_DOMAIN_NAME_LABS}`)"
+      - "traefik.http.routers.prisma-${APP_NAME}.middlewares=auth-http-admin@file"
       - "traefik.http.routers.prisma-${APP_NAME}.service=prisma-${APP_NAME}"
       - "traefik.http.services.prisma-${APP_NAME}.loadbalancer.server.port=5555"
 
