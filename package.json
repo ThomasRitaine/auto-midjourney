@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/app.ts",
-    "lint": "eslint **/*.ts --fix",
+    "lint": "eslint **/*.ts --fix && npx prettier --write .",
     "prisma:generate": "npx prisma generate",
     "prod": "ts-node --transpile-only src/app.ts"
   },
@@ -41,6 +41,7 @@
     "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^3.0.1",
+    "prettier": "^3.0.3",
     "prisma": "5.3.1",
     "typescript": "^5.2.2"
   }
