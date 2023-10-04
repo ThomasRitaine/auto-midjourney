@@ -77,9 +77,14 @@ router.post("/login", (req: Request, res: Response) => {
  * @route GET /user/signup
  * @returns {Template} Renders the login template
  */
-router.get("/signup", (req: Request, res: Response) => {
-  res.render("signup");
-});
+router.get(
+  "/signup",
+  requireAuth,
+  requireRole("admin"),
+  (req: Request, res: Response) => {
+    res.render("signup");
+  },
+);
 
 /**
  * Signup route: Registers a new user.
@@ -91,25 +96,30 @@ router.get("/signup", (req: Request, res: Response) => {
  * @param {string[]} roles - The list of roles of the new user
  * @returns {Object} Returns a success message if account creation was successful
  */
-router.post("/signup", (req: Request, res: Response) => {
-  void (async () => {
-    try {
-      const hashedPassword: any = await hashPassword(req.body.password);
-      await createUser({
-        name: req.body.name,
-        username: req.body.username,
-        email: req.body.email,
-        password: hashedPassword,
-        roles: ["user", ...req.body.roles], // add user role by default
-      });
-      return res.json({
-        message: `${req.body.username} account has been created`,
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  })();
-});
+router.post(
+  "/signup",
+  requireAuth,
+  requireRole("admin"),
+  (req: Request, res: Response) => {
+    void (async () => {
+      try {
+        const hashedPassword: any = await hashPassword(req.body.password);
+        await createUser({
+          name: req.body.name,
+          username: req.body.username,
+          email: req.body.email,
+          password: hashedPassword,
+          roles: ["user", ...req.body.roles], // add user role by default
+        });
+        return res.json({
+          message: `${req.body.username} account has been created`,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  },
+);
 
 /**
  * Reset password request route: Sends a password reset token to the user's email.
