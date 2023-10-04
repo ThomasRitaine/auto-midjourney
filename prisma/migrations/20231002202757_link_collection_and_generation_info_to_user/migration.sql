@@ -5,7 +5,7 @@ CREATE TYPE "GenerationSpeed" AS ENUM ('RELAX', 'FAST');
 ALTER TABLE "User" ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 -- Add a default user of id 00000000-0000-0000-0000-000000000000
-INSERT INTO "User" ("id", "username", "email", "password", "createdAt", "updatedAt") VALUES ('00000000-0000-0000-0000-000000000000', "default-user", "default@default.com", "hash", CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO "User" ("id", "username", "email", "password", "createdAt", "updatedAt") VALUES ('00000000-0000-0000-0000-000000000000', 'default-user', 'default@default.com', 'hash', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- AlterTable
 ALTER TABLE "Collection" ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
