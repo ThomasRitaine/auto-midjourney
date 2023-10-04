@@ -34,6 +34,19 @@ services:
     networks:
       - default
 
+# Database Administation. Uncomment to enable.
+# adminer:
+#   image: adminer
+#   environment:
+#     ADMINER_DEFAULT_DB_DRIVER: postgres
+#     ADMINER_DEFAULT_SERVER: database
+#   networks:
+#     - default
+#     - proxy
+#   labels:
+#     - "traefik.enable=true"
+#     - "traefik.http.routers.adminer-${APP_NAME}.rule=Host(`adminer.${APP_DOMAIN_NAME_MIDJOURNEY}`)"
+
 volumes:
   image:
 
