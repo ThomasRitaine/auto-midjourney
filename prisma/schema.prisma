@@ -45,6 +45,7 @@ model Image {
   isFavourite      Boolean        @default(false)
   generationInfo   GenerationInfo @relation(fields: [generationInfoId], references: [id])
   collection       Collection     @relation(fields: [collectionId], references: [id])
+  favouratedByUser User[]
   generationInfoId String
   collectionId     String
   createdAt        DateTime       @default(now())
@@ -58,6 +59,7 @@ model User {
   password                String
   collections             Collection[]
   generationInfo          GenerationInfo[]
+  favouriteImages         Image[]
   resetPasswordToken      String?          @unique
   resetPasswordExpiration DateTime?
   createdAt               DateTime         @default(now())

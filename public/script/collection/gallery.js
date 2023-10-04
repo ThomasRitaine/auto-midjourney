@@ -113,8 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const newStatus = btn.dataset.isFavourite !== "true";
 
       try {
-        const response = await fetch(`/image/${imageId}/toggle-favourite`, {
-          method: "POST",
+        const response = await fetch(`/image/${imageId}/favourite`, {
+          method: newStatus ? "POST" : "DELETE",
         });
 
         if (response.status === 200) {

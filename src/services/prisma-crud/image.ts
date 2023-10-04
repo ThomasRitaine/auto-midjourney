@@ -71,6 +71,40 @@ export const getImageById = async (id: string): Promise<Image | null> => {
   return await prisma.image.findUnique({ where: { id } });
 };
 
+export const getImageWithUserById = async (
+  id: string
+): Promise<(Image & { generationInfo: { user: { id: string } } }) | null> => {
+  return await prisma.image.findUnique({
+    where: { id },
+    include: {
+      generationInfo: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+};
+
+export const isImageGeneratedByUser = async (
+  imageId: string,
+  userId: string
+): Promise<boolean> => {
+  const image = await prisma.image.findUnique({
+    where: {
+      id: imageId,
+    },
+    include: {
+      generationInfo: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+  return image?.generationInfo.user.id === userId;
+};
+
 export const getImagesByCollectionId = async (
   collectionId: string
 ): Promise<Image[] | null> => {
@@ -106,12 +140,16 @@ export const getImagesWithPromptByCollectionId = async (
   return images;
 };
 
-export const getFavouriteImagesWithPrompt = async (): Promise<
-  Image[] | null
-> => {
+export const getFavouriteImagesWithPrompt = async (
+  userId: string | null
+): Promise<Image[] | null> => {
   const images = await prisma.image.findMany({
     where: {
-      isFavourite: true,
+      favouratedByUser: {
+        some: {
+          id: userId ?? "",
+        },
+      },
     },
     include: {
       generationInfo: {
@@ -157,20 +195,6 @@ export const getRandomPublicImage = async (): Promise<Image | null> => {
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
   return randomImage;
-};
-
-export const getFirstImagesOfFavourites = async (): Promise<{
-  path: string;
-} | null> => {
-  const result = await prisma.image.findFirst({
-    where: {
-      isFavourite: true,
-    },
-    select: {
-      path: true,
-    },
-  });
-  return result != null ? { path: result.path } : null;
 };
 
 export const getImages = async (): Promise<{

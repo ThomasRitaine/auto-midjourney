@@ -20,7 +20,7 @@ router.get(
   requireAuth,
   requireRole("generate:relax", "genrate:fast"),
   (req: Request, res: Response) => {
-    const user: User = req.user as User;
+    const user = req.user as User;
     const userRoles = user.roles;
     // If admin, add both roles
     if (userRoles.includes("admin")) {

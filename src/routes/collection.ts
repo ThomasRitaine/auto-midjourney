@@ -4,14 +4,13 @@ import {
   getNumberImageOfCollection,
   getFirstImagesOfCollectionId,
   updateCollection,
-  getNumberImageFavourite,
   getUserCollections,
   getPublicCollections,
 } from "../services/prisma-crud/collection";
 import {
   getFavouriteImagesWithPrompt,
-  getFirstImagesOfFavourites,
   getImagesWithPromptByCollectionId,
+  isImageGeneratedByUser,
 } from "../services/prisma-crud/image";
 import requireAuth from "../middlewares/requireAuth";
 import identifyUser from "../middlewares/identifyUser";
@@ -48,9 +47,6 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
         await getNumberImageOfCollection(collection.id);
     }
 
-    // Add the number of favourite images
-    numberImagesInCollection.favourites = await getNumberImageFavourite();
-
     // Get the first image of each collection
     const firstImageOfCollection: Record<string, string | null> = {};
     for (const collection of collections) {
@@ -59,14 +55,15 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
       firstImageOfCollection[collection.id] = imagePath;
     }
 
-    // Add the first image of the favourite collection
-    const firstFavouriteImage = await getFirstImagesOfFavourites();
-    const firstFavouriteImagePath =
-      firstFavouriteImage != null ? firstFavouriteImage.path : null;
-    firstImageOfCollection.favourites = firstFavouriteImagePath;
+    // Add Favouites to the collections
+    const favouritedImages = await getFavouriteImagesWithPrompt(userId);
+    numberImagesInCollection.favourites = favouritedImages?.length ?? 0;
+    firstImageOfCollection.favourites =
+      favouritedImages?.slice(-1)[0]?.path ?? null;
 
     res.render("collections", {
       userLoggedIn: user !== false,
+      userRoles: user !== false ? user.roles : [],
       userCollections,
       publicCollections,
       numberImagesInCollection,
@@ -77,15 +74,30 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
 
 router.get("/favourites", requireAuth, (req: Request, res: Response) => {
   void (async () => {
+    const user = req.user as User;
     const collection = {
       id: "favourites",
       name: "Favourites",
       slug: "favourites",
     };
 
-    const images = await getFavouriteImagesWithPrompt();
+    const images = await getFavouriteImagesWithPrompt(user.id);
 
-    res.render("collection", { images, collection });
+    // For each image, determine if the user is the owner of the image, and put the boolean in an array with the image id as key
+    const isUserGenerator: Record<string, boolean> = {};
+    for (const image of images ?? []) {
+      isUserGenerator[image.id] = await isImageGeneratedByUser(
+        image.id,
+        user.id
+      );
+    }
+
+    res.render("collection", {
+      images,
+      collection,
+      isUserLoggedIn: true,
+      isUserGenerator, // Array of [imageId: boolean] where boolean is true if the user is the generator of the image
+    });
   })();
 });
 
@@ -94,18 +106,34 @@ router.get("/:slug", identifyUser, (req: Request, res: Response) => {
     const { slug } = req.params;
     const collection = await getCollectionBySlug(slug);
     const user = req.user as User | false;
+    const isUserLoggedIn = user !== false;
     const userId = user !== false ? user.id : null;
-    const isUserOwner = collection != null && collection.userId === userId;
 
-    // return 404 if the collection doesn't exist
-    if (collection == null) {
+    // return 404 if the collection doesn't exist or is not public and the user is not logged in or the user is not the owner of the collection
+    if (
+      collection == null ||
+      (!collection.isPublic && !isUserLoggedIn) ||
+      (!collection.isPublic && isUserLoggedIn && collection.userId !== userId)
+    ) {
       res.status(404).send("Collection not found");
       return;
     }
 
     const images = await getImagesWithPromptByCollectionId(collection.id);
 
-    res.render("collection", { images, collection, isUserOwner });
+    // For each image, determine if the user is the owner of the image, and put the boolean in an array with the image id as key
+    const isUserGenerator: Record<string, boolean> = {};
+    for (const image of images ?? []) {
+      isUserGenerator[image.id] =
+        collection != null && collection.userId === userId;
+    }
+
+    res.render("collection", {
+      images,
+      collection,
+      isUserLoggedIn,
+      isUserGenerator, // Array of [imageId: boolean] where boolean is true if the user is the generator of the image
+    });
   })();
 });
 
@@ -129,8 +157,6 @@ router.post("/:id", (req: Request, res: Response) => {
     if (isPublic != null) {
       updatedData.isPublic = isPublic;
     }
-
-    console.log("updatedData", updatedData);
 
     await updateCollection(id, updatedData);
     res.sendStatus(200);

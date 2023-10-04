@@ -17,6 +17,9 @@ async function generateImage(
       await client.Relax();
     }
 
+    // Sleep one second and a half to avoid getting rate limited
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
     // Generate the image
     const imagineMJMessage = await client.Imagine(
       generationInfo.prompt,

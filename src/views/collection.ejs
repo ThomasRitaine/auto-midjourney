@@ -18,7 +18,8 @@
     <% // Do not display the "Make Public" button for the favourite collection,
     // and if user does not own the collection %>
     <!--  -->
-    <% if ( collection.id !== "favourites" && isUserOwner) { %>
+    <% if ( collection.id !== "favourites" &&
+    (Object.values(isUserGenerator).every(Boolean)) ) { %>
     <button
       id="toggleVisibilityBtn"
       data-collection-id="<%= collection.id %>"
@@ -37,12 +38,14 @@
           <img src="/<%= image.path %>" alt="" class="" />
           <div class="image-actions">
             <button class="btn-download">Download</button>
+            <% if (isUserGenerator[image.id]) { %>
             <button
               class="btn-prompt"
               data-prompt="<%= image.generationInfo.prompt %>"
             >
               See prompt
             </button>
+            <% }; if ( isUserLoggedIn ) { %>
             <button
               class="btn-favourite"
               data-is-favourite="<%= image.isFavourite %>"
@@ -50,7 +53,9 @@
               <%= image.isFavourite ? 'Remove from Favour' : 'Add to Favourites'
               %>
             </button>
+            <% }; if ( isUserGenerator[image.id] ) { %>
             <button class="btn-delete">Delete</button>
+            <% } %>
           </div>
         </div>
       </div>

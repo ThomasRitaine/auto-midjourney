@@ -92,14 +92,6 @@ export const getNumberImageOfCollection = async (
   });
 };
 
-export const getNumberImageFavourite = async (): Promise<number> => {
-  return await prisma.image.count({
-    where: {
-      isFavourite: true,
-    },
-  });
-};
-
 export const getFirstImagesOfCollectionId = async (
   id: string
 ): Promise<{ path: string } | null> => {
