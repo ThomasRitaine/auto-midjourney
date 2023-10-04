@@ -40,7 +40,7 @@ router.post("/login", (req: Request, res: Response) => {
 
       const isPasswordCorrect = await comparePassword(
         req.body.password ?? "",
-        user?.password ?? ""
+        user?.password ?? "",
       );
 
       if (user == null || !isPasswordCorrect) {
@@ -54,7 +54,7 @@ router.post("/login", (req: Request, res: Response) => {
         process.env.JWT_SECRET as string,
         {
           expiresIn: "8h",
-        }
+        },
       );
 
       res.cookie("accessToken", signedToken, {
@@ -83,7 +83,7 @@ router.get(
   requireRole("admin"),
   (req: Request, res: Response) => {
     res.render("signup");
-  }
+  },
 );
 
 /**
@@ -118,7 +118,7 @@ router.post(
         console.error(error);
       }
     })();
-  }
+  },
 );
 
 /**
@@ -144,7 +144,7 @@ router.post("/reset-password", (req: Request, res: Response) => {
       await updateUser(user.id, {
         resetPasswordToken: token,
         resetPasswordExpiration: new Date(
-          Date.now() + tokenLifetimeMinute * 60000
+          Date.now() + tokenLifetimeMinute * 60000,
         ).valueOf(),
       });
 
@@ -152,7 +152,7 @@ router.post("/reset-password", (req: Request, res: Response) => {
       return res.json({
         resetPasswordToken: token,
         resetPasswordExpiration: new Date(
-          Date.now() + tokenLifetimeMinute * 60000
+          Date.now() + tokenLifetimeMinute * 60000,
         ).valueOf(),
         tokenExpiresIn: `${tokenLifetimeMinute} minutes`,
         urlSentToEmail: `/reset-password/${token}`,

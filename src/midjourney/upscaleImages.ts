@@ -2,15 +2,14 @@ import { type MJMessage, type Midjourney } from "midjourney";
 
 async function upscaleImages(
   client: Midjourney,
-  imagineMJMessage: MJMessage
+  imagineMJMessage: MJMessage,
 ): Promise<MJMessage[]> {
   const upscaleOptions = ["U1", "U2", "U3", "U4"];
   const upscaledImages = [];
 
   for (const option of upscaleOptions) {
-    const customID = imagineMJMessage.options?.find(
-      (o) => o.label === option
-    )?.custom;
+    const customID = imagineMJMessage.options?.find((o) => o.label === option)
+      ?.custom;
     if (customID == null) {
       console.log(`no ${option}`);
       continue;
@@ -34,7 +33,7 @@ async function upscaleImages(
     upscaledImages.push(Upscale);
 
     console.log(
-      `Upscaled ${upscaledImages.length} over ${upscaleOptions.length}`
+      `Upscaled ${upscaledImages.length} over ${upscaleOptions.length}`,
     );
 
     // Sleep for 500ms

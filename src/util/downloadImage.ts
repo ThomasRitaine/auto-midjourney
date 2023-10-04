@@ -21,7 +21,7 @@ const writeFileAsync = promisify(fs.writeFile);
 async function downloadImage(
   uri: string,
   savePath: string,
-  filename?: string
+  filename?: string,
 ): Promise<void> {
   await new Promise<void>((resolve, reject) => {
     // Determine the filename from the URI if it's not provided

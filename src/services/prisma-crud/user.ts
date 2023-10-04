@@ -15,7 +15,7 @@ export const getUserById = async (id: string): Promise<User | null> => {
 };
 
 export const getUserByUsername = async (
-  username: string
+  username: string,
 ): Promise<User | null> => {
   return await prisma.user.findUnique({ where: { username } });
 };
@@ -25,7 +25,7 @@ export const getUserByEmail = async (email: string): Promise<User | null> => {
 };
 
 export const getUserByUsernameOrEmail = async (
-  login: string
+  login: string,
 ): Promise<User | null> => {
   const userByName = await prisma.user.findUnique({
     where: { username: login },
@@ -41,7 +41,7 @@ export const getUserByUsernameOrEmail = async (
 };
 
 export const getUserByResetPasswordToken = async (
-  resetPasswordToken: string
+  resetPasswordToken: string,
 ): Promise<User | null> => {
   return await prisma.user.findUnique({ where: { resetPasswordToken } });
 };
@@ -56,7 +56,7 @@ export const getUserByResetPasswordToken = async (
 
 export const updateUser = async (
   id: string,
-  updatedData: any
+  updatedData: any,
 ): Promise<User> => {
   return await prisma.user.update({
     where: { id },

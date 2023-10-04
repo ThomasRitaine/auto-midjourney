@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
           console.error("Error sending DELETE request:", error);
           alert(
-            "Failed to delete the image. Please check your connection and try again."
+            "Failed to delete the image. Please check your connection and try again.",
           );
         }
       }

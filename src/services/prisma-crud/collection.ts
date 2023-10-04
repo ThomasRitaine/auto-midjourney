@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export const createCollection = async (
   name: string,
-  userId: string
+  userId: string,
 ): Promise<Collection> => {
   const slug = slugify(name);
   const newCollection = await prisma.collection.create({
@@ -30,7 +30,7 @@ export const getAllCollections = async (): Promise<Collection[]> => {
 };
 
 export const getUserCollections = async (
-  userId: string | null
+  userId: string | null,
 ): Promise<Collection[]> => {
   if (userId == null || userId === "") {
     return [];
@@ -51,13 +51,13 @@ export const getPublicCollections = async (): Promise<Collection[]> => {
 };
 
 export const getCollectionByName = async (
-  name: string
+  name: string,
 ): Promise<Collection | null> => {
   return await prisma.collection.findUnique({ where: { name } });
 };
 
 export const getCollectionByNameOrSlug = async (
-  name: string
+  name: string,
 ): Promise<Collection | null> => {
   const collection = await prisma.collection.findUnique({
     where: { name },
@@ -71,19 +71,19 @@ export const getCollectionByNameOrSlug = async (
 };
 
 export const getCollectionBySlug = async (
-  slug: string
+  slug: string,
 ): Promise<Collection | null> => {
   return await prisma.collection.findUnique({ where: { slug } });
 };
 
 export const getCollectionById = async (
-  id: string
+  id: string,
 ): Promise<Collection | null> => {
   return await prisma.collection.findUnique({ where: { id } });
 };
 
 export const getNumberImageOfCollection = async (
-  id: string
+  id: string,
 ): Promise<number> => {
   return await prisma.image.count({
     where: {
@@ -93,7 +93,7 @@ export const getNumberImageOfCollection = async (
 };
 
 export const getFirstImagesOfCollectionId = async (
-  id: string
+  id: string,
 ): Promise<{ path: string } | null> => {
   const result = await prisma.image.findFirst({
     where: {
@@ -108,7 +108,7 @@ export const getFirstImagesOfCollectionId = async (
 
 export const updateCollection = async (
   id: string,
-  updatedData: any
+  updatedData: any,
 ): Promise<Collection> => {
   // If the name is updated, update the slug too
   if (updatedData.name != null) {

@@ -26,7 +26,7 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
     // Order the collection by updatedAt, the most recent first
     userCollections.sort(
       (a, b) =>
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
 
     // Get all public collections
@@ -34,7 +34,7 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
     // Order the collection by updatedAt, the most recent first
     publicCollections.sort(
       (a, b) =>
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
 
     // Combine the two collections
@@ -89,7 +89,7 @@ router.get("/favourites", requireAuth, (req: Request, res: Response) => {
     for (const image of images ?? []) {
       isUserGenerator[image.id] = await isImageGeneratedByUser(
         image.id,
-        user.id
+        user.id,
       );
       isFavourite[image.id] = true;
     }
@@ -99,6 +99,7 @@ router.get("/favourites", requireAuth, (req: Request, res: Response) => {
       collection,
       isUserLoggedIn: true,
       isUserGenerator, // Array of [imageId: boolean] where boolean is true if the user is the generator of the image
+      isFavourite,
     });
   })();
 });
@@ -134,7 +135,7 @@ router.get("/:slug", identifyUser, (req: Request, res: Response) => {
     const isFavourite: Record<string, boolean> = {};
     for (const image of images ?? []) {
       isFavourite[image.id] = image.favouratedByUser.some(
-        (user) => user.id === userId
+        (user) => user.id === userId,
       );
     }
 

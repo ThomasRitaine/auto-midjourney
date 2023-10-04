@@ -1,9 +1,9 @@
 $(".open-overlay").click(function () {
   $(".open-overlay").css("pointer-events", "none");
   const overlay_navigation = $(".overlay-navigation");
-    const top_bar = $(".bar-top");
-    const middle_bar = $(".bar-middle");
-    const bottom_bar = $(".bar-bottom");
+  const top_bar = $(".bar-top");
+  const middle_bar = $(".bar-middle");
+  const bottom_bar = $(".bar-bottom");
 
   overlay_navigation.toggleClass("overlay-active");
   if (overlay_navigation.hasClass("overlay-active")) {
@@ -32,7 +32,7 @@ $(".open-overlay").click(function () {
               {
                 delay: 10,
                 duration: 140,
-              }
+              },
             );
 
             $(".open-overlay").css("pointer-events", "auto");
@@ -67,7 +67,7 @@ $(".open-overlay").click(function () {
               {
                 delay: 0,
                 duration: 50,
-              }
+              },
             );
 
             $(".open-overlay").css("pointer-events", "auto");

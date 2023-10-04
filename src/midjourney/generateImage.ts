@@ -5,7 +5,7 @@ import { createImageByUri } from "../services/prisma-crud/image";
 
 async function generateImage(
   client: Midjourney,
-  generationInfo: GenerationInfo
+  generationInfo: GenerationInfo,
 ): Promise<Image[]> {
   const images: Image[] = [];
 
@@ -25,7 +25,7 @@ async function generateImage(
       generationInfo.prompt,
       (uri: string, progress: string) => {
         console.log("progress", progress);
-      }
+      },
     );
 
     if (imagineMJMessage == null) {

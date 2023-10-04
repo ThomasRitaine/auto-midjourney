@@ -3,7 +3,7 @@ import { type RequestHandler } from "express";
 import passport from "passport";
 
 const authenticateJWT = (
-  redirectIfNotAuthenticated: boolean
+  redirectIfNotAuthenticated: boolean,
 ): RequestHandler => {
   return (req, res, next) => {
     passport.authenticate(
@@ -28,7 +28,7 @@ const authenticateJWT = (
           req.user = user;
           next();
         }
-      }
+      },
     )(req, res, next);
   };
 };

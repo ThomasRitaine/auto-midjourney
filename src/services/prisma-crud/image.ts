@@ -17,7 +17,7 @@ export const createImage = async (imageData: any): Promise<Image> => {
 
 export const createImageByUri = async (
   uri: string,
-  generationInfo: GenerationInfo
+  generationInfo: GenerationInfo,
 ): Promise<Image> => {
   const image = await prisma.image.create({
     data: {
@@ -77,7 +77,7 @@ export const getImageById = async (id: string): Promise<Image | null> => {
 };
 
 export const getImageWithUserById = async (
-  id: string
+  id: string,
 ): Promise<(Image & { generationInfo: { user: { id: string } } }) | null> => {
   return await prisma.image.findUnique({
     where: { id },
@@ -93,7 +93,7 @@ export const getImageWithUserById = async (
 
 export const isImageGeneratedByUser = async (
   imageId: string,
-  userId: string
+  userId: string,
 ): Promise<boolean> => {
   const image = await prisma.image.findUnique({
     where: {
@@ -111,7 +111,7 @@ export const isImageGeneratedByUser = async (
 };
 
 export const getImagesByCollectionId = async (
-  collectionId: string
+  collectionId: string,
 ): Promise<Image[] | null> => {
   const collection = await prisma.collection.findUnique({
     where: {
@@ -130,7 +130,7 @@ export const getImagesByCollectionId = async (
 export const getImagesByCollection = async (
   collectionId: string,
   includePrompt: boolean,
-  includeFavoratedBy: boolean
+  includeFavoratedBy: boolean,
 ): Promise<
   | Array<
       Image & { generationInfo: { prompt: string } } & {
@@ -161,7 +161,7 @@ export const getImagesByCollection = async (
 };
 
 export const getFavouriteImagesWithPrompt = async (
-  userId: string | null
+  userId: string | null,
 ): Promise<Image[] | null> => {
   const images = await prisma.image.findMany({
     where: {
@@ -219,7 +219,7 @@ export const getRandomPublicImage = async (): Promise<Image | null> => {
 
 export const updateImage = async (
   id: string,
-  updatedData: any
+  updatedData: any,
 ): Promise<Image | null> => {
   return await prisma.image.update({
     where: { id },

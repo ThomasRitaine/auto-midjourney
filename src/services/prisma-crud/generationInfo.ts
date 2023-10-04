@@ -8,7 +8,7 @@ export const createGenerationInfo = async (
   repeat: number,
   collectionId: string,
   userId: string,
-  speed: "FAST" | "RELAX"
+  speed: "FAST" | "RELAX",
 ): Promise<GenerationInfo> => {
   return await prisma.generationInfo.create({
     data: {
@@ -22,14 +22,14 @@ export const createGenerationInfo = async (
 };
 
 export const getGenerationInfoById = async (
-  id: string
+  id: string,
 ): Promise<GenerationInfo | null> => {
   return await prisma.generationInfo.findUnique({ where: { id } });
 };
 
 export const updateGenerationInfo = async (
   id: string,
-  updatedData: any
+  updatedData: any,
 ): Promise<GenerationInfo> => {
   return await prisma.generationInfo.update({
     where: { id },
@@ -38,7 +38,7 @@ export const updateGenerationInfo = async (
 };
 
 export const deleteGenerationInfo = async (
-  id: string
+  id: string,
 ): Promise<GenerationInfo> => {
   return await prisma.generationInfo.delete({ where: { id } });
 };

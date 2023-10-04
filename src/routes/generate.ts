@@ -27,7 +27,7 @@ router.get(
       userRoles.push("generate:relax", "generate:fast");
     }
     res.render("generate", { userRoles });
-  }
+  },
 );
 
 router.post(
@@ -92,7 +92,7 @@ router.post(
           parseInt(repeats[index]),
           collections[index].id,
           user.id,
-          generationSpeed
+          generationSpeed,
         );
         generationInfoGroup.push(generationInfo);
       }
@@ -100,7 +100,7 @@ router.post(
       void generateAndDownload(generationInfoGroup);
 
       const isCollectionUnique = generationInfoGroup.every(
-        (item) => item.id === generationInfoGroup[0].id
+        (item) => item.id === generationInfoGroup[0].id,
       );
 
       if (generationInfoGroup.length === 1 || isCollectionUnique) {
@@ -109,7 +109,7 @@ router.post(
         res.redirect("/collection");
       }
     })();
-  }
+  },
 );
 
 export default router;

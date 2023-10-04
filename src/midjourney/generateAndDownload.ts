@@ -3,7 +3,7 @@ import generateImage from "./generateImage";
 import { type GenerationInfo } from "@prisma/client";
 
 async function generateAndDownload(
-  generationInfoGroup: GenerationInfo[]
+  generationInfoGroup: GenerationInfo[],
 ): Promise<void> {
   const client = await createClient();
 

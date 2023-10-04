@@ -13,7 +13,7 @@ const requireRole = (...allowedRoles: string[]): RequestHandler => {
     }
 
     const hasRequiredRole = allowedRoles.some((role) =>
-      user.roles.includes(role)
+      user.roles.includes(role),
     );
 
     if (hasRequiredRole) {
