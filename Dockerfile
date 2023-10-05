@@ -23,4 +23,4 @@ RUN npm run prisma:generate
 
 EXPOSE 3000 5555
 
-CMD (npx prisma studio &) && npm run prod
+CMD npm run prod

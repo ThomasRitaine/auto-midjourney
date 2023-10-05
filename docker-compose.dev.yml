@@ -17,7 +17,7 @@ services:
     ports:
       - "80:3000"
       - "5555:5555"
-    command: sh -c "(npx prisma studio &) && npm run dev"
+    command: npm run dev
 
   database:
     environment:

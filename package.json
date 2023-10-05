@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/app.ts",
     "lint": "eslint **/*.ts --fix && npx prettier --write .",
     "prisma:generate": "npx prisma generate",
+    "predev": "npx prisma studio &",
+    "dev": "nodemon src/app.ts",
+    "preprod": "npx prisma studio &",
     "prod": "ts-node --transpile-only src/app.ts"
   },
   "dependencies": {
