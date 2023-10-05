@@ -104,12 +104,14 @@ router.post(
     void (async () => {
       try {
         const hashedPassword: any = await hashPassword(req.body.password);
+        // If req.body.roles is undefined, then transform it to an empty array
+        const addRoles = req.body.roles ?? [];
         await createUser({
           name: req.body.name,
           username: req.body.username,
           email: req.body.email,
           password: hashedPassword,
-          roles: ["user", ...req.body.roles], // add user role by default
+          roles: ["user", ...addRoles], // add user role by default
         });
         return res.json({
           message: `${req.body.username} account has been created`,
