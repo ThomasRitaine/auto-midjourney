@@ -6,6 +6,7 @@ import {
   updateCollection,
   getUserCollections,
   getPublicCollections,
+  getAllCollections,
 } from "../services/prisma-crud/collection";
 import {
   getFavouriteImagesWithPrompt,
@@ -14,7 +15,7 @@ import {
 } from "../services/prisma-crud/image";
 import requireAuth from "../middlewares/requireAuth";
 import identifyUser from "../middlewares/identifyUser";
-import { type User } from "@prisma/client";
+import { type Collection, Role, type User } from "@prisma/client";
 
 const router = express.Router();
 router.get("/", identifyUser, (req: Request, res: Response) => {
@@ -37,19 +38,34 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
         new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     );
 
+    // if the user is logged in and has the "COLLECTION_SEE_ALL" role, querry all collections
+    let allCollections: Collection[] = [];
+    if (user !== false && user.roles.includes(Role.COLLECTION_SEE_ALL)) {
+      allCollections = await getAllCollections();
+      // Order the collection by updatedAt, the most recent first
+      allCollections.sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+      );
+    }
+
     // Combine the two collections
-    const collections = [...userCollections, ...publicCollections];
+    const collectionsToDisplay = [
+      ...userCollections,
+      ...publicCollections,
+      ...allCollections,
+    ];
 
     // Get the number of image in each collection
     const numberImagesInCollection: Record<string, number> = {};
-    for (const collection of collections) {
+    for (const collection of collectionsToDisplay) {
       numberImagesInCollection[collection.id] =
         await getNumberImageOfCollection(collection.id);
     }
 
     // Get the first image of each collection
     const firstImageOfCollection: Record<string, string | null> = {};
-    for (const collection of collections) {
+    for (const collection of collectionsToDisplay) {
       const image = await getFirstImagesOfCollectionId(collection.id);
       const imagePath = image != null ? image.path : null;
       firstImageOfCollection[collection.id] = imagePath;
@@ -65,6 +81,7 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
       userLoggedIn: user !== false,
       userRoles: user !== false ? user.roles : [],
       userCollections,
+      allCollections,
       publicCollections,
       numberImagesInCollection,
       firstImageOfCollection,
@@ -112,12 +129,28 @@ router.get("/:slug", identifyUser, (req: Request, res: Response) => {
     const isUserLoggedIn = user !== false;
     const userId = user !== false ? user.id : null;
 
+    // If the user is logged in and has the "ADMIN" or the "COLLECTION_SEE_ALL" role, bypass the privacy of the collection
+    const bypassCollectionPrivacy =
+      isUserLoggedIn &&
+      user?.roles.some((item) =>
+        [Role.ADMIN as string, Role.COLLECTION_SEE_ALL as string].includes(
+          item as string,
+        ),
+      );
+
     // return 404 if the collection doesn't exist or is not public and the user is not logged in or the user is not the owner of the collection
-    if (
-      collection == null ||
-      (!collection.isPublic && !isUserLoggedIn) ||
-      (!collection.isPublic && isUserLoggedIn && collection.userId !== userId)
-    ) {
+    if (!bypassCollectionPrivacy) {
+      if (
+        collection == null ||
+        (!collection.isPublic && !isUserLoggedIn) ||
+        (!collection.isPublic && isUserLoggedIn && collection.userId !== userId)
+      ) {
+        res.status(404).send("Collection not found");
+        return;
+      }
+    }
+
+    if (collection == null) {
       res.status(404).send("Collection not found");
       return;
     }

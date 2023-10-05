@@ -80,6 +80,57 @@
         <hr />
         <br />
 
+
+
+        <% if (userRoles.includes("COLLECTION_SEE_ALL")) { %>
+            <h2>Admin : All Collections</h2>
+            <br />
+            <%
+            let counter = 0;
+            allCollections.forEach((collection, index) => {
+                if (counter % 3 === 0) {
+            %>
+                    <div class="Grid-row">
+            <%
+                }
+            %>
+                <a class="Card" onclick="openGallery(<%= collection.id %>)" id="card-<%= index+1 %>">
+                    <div class="Card-thumb">
+                        <div class="Card-shadow"></div>
+                        <div class="Card-shadow"></div>
+                        <div class="Card-shadow"></div>
+                        <div
+                            class="Card-image"
+                            style="background-image: url(<%= firstImageOfCollection[collection.id] %>)"
+                        ></div>
+                    </div>
+                    <div class="Card-title"><span><%= collection.name %></span></div>
+                    <div class="Card-explore"><span>Browse all <%= numberImagesInCollection[collection.id] %> images</span></div>
+                    <button onclick="window.location.href='/collection/<%= collection.slug %>'" class=  "Card-button">view more</button>
+                </a>
+            <%
+                counter++;
+                if (counter % 3 === 0) { 
+            %>
+                    </div>
+            <%
+                }
+            });
+
+            // Check if there are any remaining cards that need to be wrapped in a closing div tag
+            if (counter % 3 !== 0) { 
+            %>
+                    </div>
+            <%
+                } 
+            %>
+            <br />
+            <hr />
+            <br />
+        <% } // End of condition if User can see every collection %>
+
+        
+
         <% } // End of condition if User is logged in %>
 
         <h2>Public Collections</h2>
