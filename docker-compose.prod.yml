@@ -45,7 +45,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.adminer-${APP_NAME}.rule=Host(`adminer.${APP_DOMAIN_NAME_MIDJOURNEY}`)"
-      - "traefik.http.routers.prisma-${APP_NAME}.middlewares=auth-http-admin@file"
+      - "traefik.http.routers.adminer-${APP_NAME}.middlewares=auth-http-admin@file"
 
 volumes:
   image:
