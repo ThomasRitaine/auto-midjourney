@@ -50,11 +50,21 @@ model Image {
   createdAt        DateTime       @default(now())
 }
 
+enum Role {
+  USER // Default role
+  GENERATE_RELAX // Can generate images with Relax speed
+  GENERATE_FAST // Can generate images with Fast speed
+  COLLECTION_SEE_ALL // Can see all collections of all users
+  COLLECTION_DELETE_ALL // Can delete all collections of all users
+  IMAGE_DELETE_ALL // Can delete all images of all users
+  ADMIN // Can do everything
+}
+
 model User {
   id                      String           @id @default(uuid())
   username                String           @unique
   email                   String           @unique
-  roles                   String[]         @default(["user"])
+  roles                   Role[]           @default([USER])
   password                String
   collections             Collection[]
   generationInfo          GenerationInfo[]

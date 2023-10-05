@@ -9,6 +9,7 @@ import {
   type User,
   type Collection,
   type GenerationInfo,
+  Role,
 } from "@prisma/client";
 import requireAuth from "../middlewares/requireAuth";
 import requireRole from "../middlewares/requireRole";
@@ -18,13 +19,13 @@ const router = express.Router();
 router.get(
   "/",
   requireAuth,
-  requireRole("generate:relax", "genrate:fast"),
+  requireRole(Role.GENERATE_RELAX, Role.GENERATE_FAST),
   (req: Request, res: Response) => {
     const user = req.user as User;
     const userRoles = user.roles;
     // If admin, add both roles
-    if (userRoles.includes("admin")) {
-      userRoles.push("generate:relax", "generate:fast");
+    if (userRoles.includes(Role.ADMIN)) {
+      userRoles.push(Role.GENERATE_RELAX, Role.GENERATE_FAST);
     }
     res.render("generate", { userRoles });
   },
@@ -33,7 +34,7 @@ router.get(
 router.post(
   "/",
   requireAuth,
-  requireRole("generate:relax", "genrate:fast"),
+  requireRole(Role.GENERATE_RELAX, Role.GENERATE_FAST),
   (req: Request, res: Response) => {
     void (async () => {
       const user = req.user as User;
@@ -43,8 +44,8 @@ router.post(
       // Get the right generation speed based on the user's roles and request
       let generationSpeed: "FAST" | "RELAX";
       if (
-        user.roles.includes("generate:relax") &&
-        !user.roles.includes("generate:fast")
+        user.roles.includes(Role.GENERATE_RELAX) &&
+        !user.roles.includes(Role.GENERATE_FAST)
       ) {
         generationSpeed = "RELAX";
       } else {

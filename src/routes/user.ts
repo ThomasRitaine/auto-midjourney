@@ -14,6 +14,7 @@ import {
 import { sign } from "jsonwebtoken";
 import requireAuth from "../middlewares/requireAuth";
 import requireRole from "../middlewares/requireRole";
+import { Role } from "@prisma/client";
 
 const router = express.Router();
 
@@ -80,9 +81,11 @@ router.post("/login", (req: Request, res: Response) => {
 router.get(
   "/signup",
   requireAuth,
-  requireRole("admin"),
+  requireRole(Role.ADMIN),
   (req: Request, res: Response) => {
-    res.render("signup");
+    res.render("signup", {
+      roles: Object.values(Role).filter((item) => item !== "USER"),
+    });
   },
 );
 
@@ -99,7 +102,7 @@ router.get(
 router.post(
   "/signup",
   requireAuth,
-  requireRole("admin"),
+  requireRole(Role.ADMIN),
   (req: Request, res: Response) => {
     void (async () => {
       try {
@@ -111,7 +114,7 @@ router.post(
           username: req.body.username,
           email: req.body.email,
           password: hashedPassword,
-          roles: ["user", ...addRoles], // add user role by default
+          roles: [Role.USER, ...addRoles], // add user role by default
         });
         return res.json({
           message: `${req.body.username} account has been created`,

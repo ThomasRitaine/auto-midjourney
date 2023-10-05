@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -36,7 +36,7 @@
       <div class="global-section">
         <div class="generation-speed">
           <label>Generation Speed:</label>
-          <% if (userRoles.includes("generate:relax")) { %>
+          <% if (userRoles.includes("GENERATE_RELAX")) { %>
           <div>
             <input
               type="radio"
@@ -47,7 +47,7 @@
             />
             <label for="relax">Relax</label>
           </div>
-          <% } %> <% if (userRoles.includes("generate:fast")) { %>
+          <% } %> <% if (userRoles.includes("GENERATE_FAST")) { %>
           <div>
             <input type="radio" name="generationSpeed" value="FAST" id="fast" />
             <label for="fast">Fast</label>

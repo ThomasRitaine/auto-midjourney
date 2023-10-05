@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -22,16 +22,19 @@
           <input type="password" name="password" id="password" required />
 
           <label>Roles:</label>
+
+          <% for (const role of roles) { %>
           <div>
             <input
               type="checkbox"
               name="roles[]"
-              value="generate:relax"
-              id="generate-relax"
+              value="<%= role %>"
+              id="<%= role %>"
             />
-            <label for="generate-relax">Generate relax</label>
+            <label for="<%= role %>"><%= role %></label>
           </div>
-
+          <% }; %>
+<!-- 
           <div>
             <input
               type="checkbox"
@@ -46,7 +49,7 @@
             <input type="checkbox" name="roles[]" value="admin" id="admin" />
             <label for="admin">Admin</label>
           </div>
-        </div>
+        </div> -->
 
         <input type="submit" id="submit" value="Register" />
       </form>

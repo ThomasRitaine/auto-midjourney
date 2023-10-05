@@ -1,4 +1,4 @@
-import { type User } from "@prisma/client";
+import { Role, type User } from "@prisma/client";
 import { type RequestHandler } from "express";
 
 const requireRole = (...allowedRoles: string[]): RequestHandler => {
@@ -7,13 +7,13 @@ const requireRole = (...allowedRoles: string[]): RequestHandler => {
     const user = req.user as User;
 
     // Allow if user is admin
-    if (user.roles.includes("admin")) {
+    if (user.roles.includes(Role.ADMIN)) {
       next();
       return;
     }
 
     const hasRequiredRole = allowedRoles.some((role) =>
-      user.roles.includes(role),
+      user.roles.includes(role as Role),
     );
 
     if (hasRequiredRole) {
