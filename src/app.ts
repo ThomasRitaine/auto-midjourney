@@ -7,6 +7,7 @@ import * as cors from "cors";
 import collectionRouter from "./routes/collection";
 import imageRouter from "./routes/image";
 import userRouter from "./routes/user";
+import adminFavouriteRouter from "./routes/admin/favourite";
 import { getRandomPublicImage } from "./services/prisma-crud/image";
 import passport from "passport";
 import passportConfig from "./services/auth/passport";
@@ -43,6 +44,9 @@ app.use("/generate", generateRouter);
 app.use("/collection", collectionRouter);
 app.use("/image", imageRouter);
 app.use("/user", userRouter);
+
+// Admin Routers
+app.use(adminFavouriteRouter);
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);

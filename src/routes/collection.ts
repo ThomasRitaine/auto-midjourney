@@ -13,6 +13,7 @@ import {
 import {
   getFavouriteImagesWithPrompt,
   getImagesByCollection,
+  getNumberAllFavouriteImages,
   isImageGeneratedByUser,
 } from "../services/prisma-crud/image";
 import requireAuth from "../middlewares/requireAuth";
@@ -79,6 +80,10 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
     numberImagesInCollection.favourites = favouritedImages?.length ?? 0;
     firstImageOfCollection.favourites =
       favouritedImages?.slice(-1)[0]?.path ?? null;
+
+    // Add the total number of favourite image
+    numberImagesInCollection.allFavourites =
+      await getNumberAllFavouriteImages();
 
     res.render("collections", {
       userLoggedIn: user !== false,

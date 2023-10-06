@@ -28,6 +28,24 @@
                 <div class="Card-explore"><span>Browse all <%= numberImagesInCollection.favourites %> images</span></div>
                 <button onclick="window.location.href='/collection/favourites'" class=  "Card-button">view more</button>
             </a>
+
+            <% if (userRoles.includes("ADMIN")) { %>
+            <a class="Card" onclick="openGallery(favourites)" id="card-0">
+                <div class="Card-thumb">
+                    <div class="Card-shadow"></div>
+                    <div class="Card-shadow"></div>
+                    <div class="Card-shadow"></div>
+                    <div
+                        class="Card-image"
+                        style="background-image: url(<%= firstImageOfCollection.favourites %>)"
+                    ></div>
+                </div>
+                <div class="Card-title"><span>Admin : All Favourites</span></div>
+                <div class="Card-explore"><span>Browse all <%= numberImagesInCollection.allFavourites %> images</span></div>
+                <button onclick="window.location.href='/admin/favourite'" class=  "Card-button">view more</button>
+            </a>
+            <% } %>
+
         </div>
         <br />
         <hr />

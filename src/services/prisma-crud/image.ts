@@ -186,6 +186,49 @@ export const getFavouriteImagesWithPrompt = async (
   return images;
 };
 
+export const getAllFavouriteImagesWithPrompt = async (): Promise<
+  Array<
+    Image & { generationInfo: { prompt: string } } & {
+      favouratedByUser: Array<{ id: string }>;
+    }
+  >
+> => {
+  // retrieve all images that are favourited by at least one user, order by the number of users that favourited the image
+  const images = await prisma.image.findMany({
+    where: {
+      favouratedByUser: {
+        some: {},
+      },
+    },
+    orderBy: {
+      favouratedByUser: {
+        _count: "desc",
+      },
+    },
+    include: {
+      generationInfo: {
+        select: {
+          prompt: true,
+        },
+      },
+      favouratedByUser: true,
+    },
+  });
+  return images;
+};
+
+export const getNumberAllFavouriteImages = async (): Promise<number> => {
+  // retrieve the count of all images that are favourited by at least one user
+  const count = await prisma.image.count({
+    where: {
+      favouratedByUser: {
+        some: {},
+      },
+    },
+  });
+  return count;
+};
+
 export const getRandomPublicImage = async (): Promise<Image | null> => {
   // Get all public collections
   const publicCollections = await prisma.collection.findMany({
