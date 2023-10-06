@@ -49,7 +49,8 @@ router.post(
       ) {
         generationSpeed = "RELAX";
       } else {
-        generationSpeed = req.body.speed === "FAST" ? "FAST" : "RELAX";
+        generationSpeed =
+          req.body.generationSpeed === "FAST" ? "FAST" : "RELAX";
       }
 
       const prompts = Array.isArray(req.body.prompt)
