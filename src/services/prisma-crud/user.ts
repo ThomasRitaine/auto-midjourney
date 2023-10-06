@@ -46,14 +46,6 @@ export const getUserByResetPasswordToken = async (
   return await prisma.user.findUnique({ where: { resetPasswordToken } });
 };
 
-// export const getNumberImageOfUser = async (id: string): Promise<number> => {
-//   return await prisma.image.count({
-//     where: {
-//       userId: id,
-//     },
-//   });
-// };
-
 export const updateUser = async (
   id: string,
   updatedData: any,
@@ -61,6 +53,13 @@ export const updateUser = async (
   return await prisma.user.update({
     where: { id },
     data: updatedData,
+  });
+};
+
+export const updateLastLoginUser = async (id: string): Promise<User> => {
+  return await prisma.user.update({
+    where: { id },
+    data: { lastLoginAt: new Date() },
   });
 };
 

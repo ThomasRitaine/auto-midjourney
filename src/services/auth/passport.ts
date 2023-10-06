@@ -1,7 +1,7 @@
 import { type User } from "@prisma/client";
 import passport from "passport";
 import { Strategy } from "passport-jwt";
-import { getUserById } from "../prisma-crud/user";
+import { getUserById, updateLastLoginUser } from "../prisma-crud/user";
 import { type Request } from "express";
 
 const cookieExtractor = (req: Request): string | null => {
@@ -30,6 +30,7 @@ export default (): void => {
       void (async () => {
         const user: User | null = await getUserById(jwtPayload.id);
         if (user != null) {
+          await updateLastLoginUser(user.id);
           done(null, user);
           return;
         }
