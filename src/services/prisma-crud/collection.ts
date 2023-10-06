@@ -28,7 +28,11 @@ export const createCollection = async (
 };
 
 export const getAllCollections = async (): Promise<Collection[]> => {
-  return await prisma.collection.findMany();
+  return await prisma.collection.findMany({
+    orderBy: {
+      updatedAt: "asc",
+    },
+  });
 };
 
 export const getUserCollections = async (
@@ -41,6 +45,9 @@ export const getUserCollections = async (
     where: {
       userId,
     },
+    orderBy: {
+      updatedAt: "asc",
+    },
   });
 };
 
@@ -48,6 +55,9 @@ export const getPublicCollections = async (): Promise<Collection[]> => {
   return await prisma.collection.findMany({
     where: {
       isPublic: true,
+    },
+    orderBy: {
+      updatedAt: "asc",
     },
   });
 };

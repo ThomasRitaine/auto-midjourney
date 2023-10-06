@@ -22,35 +22,21 @@ import { type Collection, Role, type User } from "@prisma/client";
 import { unlinkGenerationInfoFromCollection } from "../services/prisma-crud/generationInfo";
 
 const router = express.Router();
+
 router.get("/", identifyUser, (req: Request, res: Response) => {
   void (async () => {
     const user = req.user as User | false;
     // ternal operator to get the userId if user is not false, else null
     const userId = user !== false ? user.id : null;
     const userCollections = await getUserCollections(userId);
-    // Order the collection by updatedAt, the most recent first
-    userCollections.sort(
-      (a, b) =>
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-    );
 
     // Get all public collections
     const publicCollections = await getPublicCollections();
-    // Order the collection by updatedAt, the most recent first
-    publicCollections.sort(
-      (a, b) =>
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-    );
 
     // if the user is logged in and has the "COLLECTION_SEE_ALL" role, querry all collections
     let allCollections: Collection[] = [];
     if (user !== false && user.roles.includes(Role.COLLECTION_SEE_ALL)) {
       allCollections = await getAllCollections();
-      // Order the collection by updatedAt, the most recent first
-      allCollections.sort(
-        (a, b) =>
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-      );
     }
 
     // Combine the two collections
