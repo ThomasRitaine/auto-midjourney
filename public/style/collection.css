@@ -148,7 +148,8 @@ body {
   color: white;
 }
 
-.btn-delete {
+.btn-delete,
+#deleteCollectionBtn {
   background-color: red;
   color: white;
 }
@@ -165,7 +166,8 @@ body {
   background-color: #d54f96; /* Slightly darker blue on hover */
 }
 
-.btn-delete:hover {
+.btn-delete:hover,
+#deleteCollectionBtn:hover {
   background-color: #990000; /* slightly darker red */
 }
 

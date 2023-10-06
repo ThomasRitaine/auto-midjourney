@@ -1,6 +1,8 @@
 import { type Collection, PrismaClient } from "@prisma/client";
 import { mkdir } from "fs/promises";
 import slugify from "../../util/slugify";
+import { deleteImage } from "./image";
+import fs from "fs";
 
 const prisma = new PrismaClient();
 
@@ -120,6 +122,16 @@ export const updateCollection = async (
   });
 };
 
-export const deleteCollection = async (id: string): Promise<void> => {
+export const deleteCollectionWithImages = async (id: string): Promise<void> => {
+  const collection = await getCollectionById(id);
+  const images = await prisma.image.findMany({
+    where: {
+      collectionId: id,
+    },
+  });
+  for (const image of images) {
+    await deleteImage(image.id);
+  }
+  fs.rmdirSync(`image/${collection?.slug}`, { recursive: true });
   await prisma.collection.delete({ where: { id } });
 };

@@ -29,14 +29,18 @@ export const createImageByUri = async (
       },
       collection: {
         connect: {
-          id: generationInfo.collectionId,
+          id:
+            generationInfo.collectionId ??
+            "00000000-0000-0000-0000-000000000000",
         },
       },
     },
   });
 
   const collection = await prisma.collection.findUnique({
-    where: { id: generationInfo.collectionId },
+    where: {
+      id: generationInfo.collectionId ?? "00000000-0000-0000-0000-000000000000",
+    },
   });
 
   const extension = uri.split(".").pop();

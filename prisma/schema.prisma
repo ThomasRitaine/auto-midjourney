@@ -18,8 +18,8 @@ model GenerationInfo {
   prompt       String
   repeat       Int
   images       Image[]
-  collection   Collection      @relation(fields: [collectionId], references: [id])
-  collectionId String
+  collection   Collection?     @relation(fields: [collectionId], references: [id])
+  collectionId String?
   user         User            @relation(fields: [userId], references: [id])
   userId       String          @default("00000000-0000-0000-0000-000000000000")
   speed        GenerationSpeed @default(RELAX)

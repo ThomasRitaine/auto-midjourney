@@ -7,6 +7,8 @@ import {
   getUserCollections,
   getPublicCollections,
   getAllCollections,
+  getCollectionById,
+  deleteCollectionWithImages,
 } from "../services/prisma-crud/collection";
 import {
   getFavouriteImagesWithPrompt,
@@ -16,6 +18,7 @@ import {
 import requireAuth from "../middlewares/requireAuth";
 import identifyUser from "../middlewares/identifyUser";
 import { type Collection, Role, type User } from "@prisma/client";
+import { unlinkGenerationInfoFromCollection } from "../services/prisma-crud/generationInfo";
 
 const router = express.Router();
 router.get("/", identifyUser, (req: Request, res: Response) => {
@@ -205,6 +208,47 @@ router.post("/:id", (req: Request, res: Response) => {
 
     await updateCollection(id, updatedData);
     res.sendStatus(200);
+  })();
+});
+
+// Route to delete a collection and all its images
+router.delete("/:id", requireAuth, (req: Request, res: Response) => {
+  void (async () => {
+    const collectionId = req.params.id;
+    const user = req.user as User;
+    try {
+      // Delete the collection if the collection belongs to the user or the user has admin role
+      if (
+        !user.roles.some((role) =>
+          [Role.ADMIN as string, Role.COLLECTION_DELETE_ALL as string].includes(
+            role,
+          ),
+        )
+      ) {
+        const collection = await getCollectionById(collectionId);
+        if (collection == null || collection.userId !== user.id) {
+          res.status(403).send({
+            success: false,
+            message: "You are not allowed to delete this collection.",
+          });
+          return;
+        }
+      }
+      // Unlink the collection from the generationInfo
+      await unlinkGenerationInfoFromCollection(collectionId);
+
+      // Delete the collection
+      await deleteCollectionWithImages(collectionId);
+      res.status(200).send({
+        success: true,
+        message: `Collection ${collectionId} deleted successfully.`,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .send({ success: false, message: "Internal server error." });
+    }
   })();
 });
 

@@ -15,11 +15,15 @@
 
     <h1>Collection : <%= collection.name %></h1>
 
-    <% // Do not display the "Make Public" button for the favourite collection,
-    // and if user does not own the collection %>
-    <!--  -->
-    <% if ( collection.id !== "favourites" &&
-    (Object.values(isUserGenerator).every(Boolean)) ) { %>
+    <!-- Admin control Buttons 
+      Do not display on favourite collection, or if user does not own the collection
+    -->
+    <% if ( collection.id !== "favourites" ) { %>
+
+    <!-- Make public button
+        Do not display the "Make Public" button for the favourite collection, and if user does not own the collection
+      -->
+    <% if ( Object.values(isUserGenerator).every(Boolean) ) { %>
     <button
       id="toggleVisibilityBtn"
       data-collection-id="<%= collection.id %>"
@@ -27,7 +31,18 @@
     >
       <%= collection.isPublic ? 'Make Private' : 'Make Public' %>
     </button>
-    <% } %>
+    <% } // End of make public button %>
+
+    <!-- Delete collection button
+        Not displayed for the favourite collection, if user does not own the collection, or if user does not have delete all collection role
+      -->
+    <% if ( Object.values(isUserGenerator).every(Boolean) ) { %>
+    <button id="deleteCollectionBtn" data-collection-id="<%= collection.id %>">
+      Delete Collection
+    </button>
+    <% } // End of delete collection button %>
+    <!--  -->
+    <% } // End of admin control buttons %>
 
     <br /><br />
 
@@ -71,5 +86,6 @@
     </script>
     <script src="/script/collection/gallery.js"></script>
     <script src="/script/collection/toggle-visibility.js"></script>
+    <script src="/script/collection/delete-collection.js"></script>
   </body>
 </html>

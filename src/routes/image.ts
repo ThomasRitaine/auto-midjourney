@@ -5,7 +5,7 @@ import {
   updateImage,
 } from "../services/prisma-crud/image";
 import requireAuth from "../middlewares/requireAuth";
-import { type User } from "@prisma/client";
+import { Role, type User } from "@prisma/client";
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.delete("/:id", requireAuth, (req: Request, res: Response) => {
     const user = req.user as User;
     try {
       // Delete the image if the image belongs to the user or the user has admin role
-      if (!user.roles.includes("ADMIN")) {
+      if (!user.roles.includes(Role.ADMIN)) {
         const image = await getImageWithUserById(imageId);
         if (image == null || image.generationInfo.user.id !== user.id) {
           res.status(403).send({

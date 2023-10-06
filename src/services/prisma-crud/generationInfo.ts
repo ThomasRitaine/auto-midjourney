@@ -37,6 +37,19 @@ export const updateGenerationInfo = async (
   });
 };
 
+export const unlinkGenerationInfoFromCollection = async (
+  collectionId: string,
+): Promise<void> => {
+  await prisma.generationInfo.updateMany({
+    where: {
+      collectionId,
+    },
+    data: {
+      collectionId: null,
+    },
+  });
+};
+
 export const deleteGenerationInfo = async (
   id: string,
 ): Promise<GenerationInfo> => {
