@@ -30,7 +30,7 @@ export const createCollection = async (
 export const getAllCollections = async (): Promise<Collection[]> => {
   return await prisma.collection.findMany({
     orderBy: {
-      updatedAt: "asc",
+      updatedAt: "desc",
     },
   });
 };
@@ -46,7 +46,7 @@ export const getUserCollections = async (
       userId,
     },
     orderBy: {
-      updatedAt: "asc",
+      updatedAt: "desc",
     },
   });
 };
@@ -57,7 +57,7 @@ export const getPublicCollections = async (): Promise<Collection[]> => {
       isPublic: true,
     },
     orderBy: {
-      updatedAt: "asc",
+      updatedAt: "desc",
     },
   });
 };
