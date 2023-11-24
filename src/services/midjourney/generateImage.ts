@@ -1,8 +1,8 @@
 import { type Midjourney } from "midjourney";
 import upscaleImages from "./upscaleImages";
 import { type GenerationInfo, type Image } from "@prisma/client";
-import { createImageByUri } from "../services/prisma-crud/image";
-import { updateCollection } from "../services/prisma-crud/collection";
+import { createImageByUri } from "../prisma-crud/image";
+import { updateCollection } from "../prisma-crud/collection";
 
 async function generateImage(
   client: Midjourney,

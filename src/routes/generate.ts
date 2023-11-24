@@ -4,7 +4,7 @@ import {
   createCollection,
   getCollectionByNameOrSlug,
 } from "../services/prisma-crud/collection";
-import generateAndDownload from "../midjourney/generateAndDownload";
+import generateAndDownload from "../services/midjourney/generateAndDownload";
 import {
   type User,
   type Collection,
