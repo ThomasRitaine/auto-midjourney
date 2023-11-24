@@ -45,6 +45,7 @@ model Image {
   generationInfo   GenerationInfo @relation(fields: [generationInfoId], references: [id])
   collection       Collection     @relation(fields: [collectionId], references: [id])
   favouratedByUser User[]
+  isTweeted        Boolean        @default(false)
   generationInfoId String
   collectionId     String
   createdAt        DateTime       @default(now())
@@ -61,17 +62,20 @@ enum Role {
 }
 
 model User {
-  id                      String           @id @default(uuid())
-  username                String           @unique
-  email                   String           @unique
-  roles                   Role[]           @default([USER])
-  password                String
-  collections             Collection[]
-  generationInfo          GenerationInfo[]
-  favouriteImages         Image[]
-  resetPasswordToken      String?          @unique
-  resetPasswordExpiration DateTime?
-  createdAt               DateTime         @default(now())
-  updatedAt               DateTime         @default(now()) @updatedAt
-  lastLoginAt             DateTime?
+  id                        String           @id @default(uuid())
+  username                  String           @unique
+  email                     String           @unique
+  roles                     Role[]           @default([USER])
+  password                  String
+  collections               Collection[]
+  generationInfo            GenerationInfo[]
+  favouriteImages           Image[]
+  resetPasswordToken        String?          @unique
+  resetPasswordExpiration   DateTime?
+  twitterOAuth1AccessToken  String?
+  twitterOAuth1AccessSecret String?
+  twitterOAuth2RefreshToken String?
+  createdAt                 DateTime         @default(now())
+  updatedAt                 DateTime         @default(now()) @updatedAt
+  lastLoginAt               DateTime?
 }
