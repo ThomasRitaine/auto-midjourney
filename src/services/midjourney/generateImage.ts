@@ -3,6 +3,7 @@ import upscaleImages from "./upscaleImages";
 import { type GenerationInfo, type Image } from "@prisma/client";
 import { createImageByUri } from "../prisma-crud/image";
 import { updateCollection } from "../prisma-crud/collection";
+import sleep from "../../util/sleep";
 
 async function generateImage(
   client: Midjourney,
@@ -19,7 +20,7 @@ async function generateImage(
     }
 
     // Sleep one second and a half to avoid getting rate limited
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await sleep(1500);
 
     // Generate the image
     const imagineMJMessage = await client.Imagine(

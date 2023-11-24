@@ -1,3 +1,4 @@
+import sleep from "../../util/sleep";
 import createClient from "./createClient";
 import generateImage from "./generateImage";
 import { type GenerationInfo } from "@prisma/client";
@@ -13,7 +14,7 @@ async function generateAndDownload(
     console.log(`Generation finished`);
 
     // Sleep for one second
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await sleep(1000);
   }
 }
 

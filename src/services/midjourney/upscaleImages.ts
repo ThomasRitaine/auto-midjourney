@@ -1,4 +1,5 @@
 import { type MJMessage, type Midjourney } from "midjourney";
+import sleep from "../../util/sleep";
 
 async function upscaleImages(
   client: Midjourney,
@@ -37,7 +38,7 @@ async function upscaleImages(
     );
 
     // Sleep for 500ms
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await sleep(500);
   }
 
   return upscaledImages;
