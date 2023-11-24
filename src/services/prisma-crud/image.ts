@@ -280,3 +280,25 @@ export const deleteImage = async (id: string): Promise<void> => {
   fs.unlinkSync(image.path);
   await prisma.image.delete({ where: { id } });
 };
+
+export const getRandomFavoritedNotTweetedImage = async (): Promise<
+  (Image & { generationInfo: { prompt: string } }) | null
+> => {
+  const images = await prisma.image.findMany({
+    where: {
+      favouratedByUser: {
+        some: {},
+      },
+      isTweeted: false,
+    },
+    include: {
+      generationInfo: {
+        select: {
+          prompt: true,
+        },
+      },
+    },
+  });
+  const randomImage = images[Math.floor(Math.random() * images.length)] ?? null;
+  return randomImage;
+};

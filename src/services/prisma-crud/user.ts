@@ -1,4 +1,4 @@
-import { type User, PrismaClient } from "@prisma/client";
+import { type User, PrismaClient, Role } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -65,4 +65,10 @@ export const updateLastLoginUser = async (id: string): Promise<User> => {
 
 export const deleteUser = async (id: string): Promise<void> => {
   await prisma.user.delete({ where: { id } });
+};
+
+export const getAdminUser = async (): Promise<User | null> => {
+  return await prisma.user.findFirst({
+    where: { roles: { has: Role.ADMIN } },
+  });
 };
