@@ -6,14 +6,14 @@ const openai = new OpenAI({
 });
 
 /**
- * Trims the tweet content to fit within 255 characters. It preserves the original formatting,
+ * Trims the tweet content to fit within 270 characters. It preserves the original formatting,
  * including line breaks, by removing words from the end until the length is within the limit.
  *
  * @param tweetContent - The initial tweet content.
  * @returns The trimmed tweet content within the character limit.
  */
 function trimTweetContent(tweetContent: string): string {
-  while (tweetContent.length > 258) {
+  while (tweetContent.length > 270) {
     const lines = tweetContent.split("\n"); // Split by newline
     const lastLine = lines[lines.length - 1];
     const words = lastLine.split(/\s+/); // Split the last line by whitespace
@@ -47,7 +47,7 @@ export default async (prompt: string): Promise<string> => {
         {
           role: "system",
           content:
-            "You are a professional community manager and *brand developer* with over 20 years of experience. Your task is to write the content of a *tweet* that presents an AI generated Art image. The user will give the prompt used to generate the image, and you will respond with the tweet's content. You should include lot of hashtags, keywords, and encourage to visit ai-art.tv website for more images and for custom art. The Tweet must be *less than 250 characters*.",
+            "You are a professional community manager and *brand developer* with over 20 years of experience. Your task is to write the content of a *tweet* that presents an AI generated Art image. The user will give the prompt used to generate the image, and you will respond with the tweet's content. You should include lot of hashtags, keywords, and encourage to send a DM or to visit ai-art.tv/create-yours to collaborate on custom art. The Tweet must be *less than 250 characters*. Always add those hashtags to the tweets: #AI #AiArt #ArtCollab #ArtOfTheDay",
         },
         {
           role: "user",
@@ -56,11 +56,11 @@ export default async (prompt: string): Promise<string> => {
         },
         {
           role: "assistant",
-          content: `Autumn reimagined in AI watercolors 🍂🖌️ Your mood, our canvas. Create your fall masterpiece
+          content: `Autumn reimagined in AI watercolors 🍂🖌️ Let's collaborate to create your fall masterpiece
 
-Serenity awaits at ai-art.tv
+DM or visit ai-art.tv/create-yours for bespoke art
 
-#AI #AiArt #Midjourney #Fall #ArtLovers #Innovation #Inspiration #Art #Painting #Nature #Inspiration #Beautiful #Love #DigitalMarketing`,
+#AI #AiArt #ArtCollab #Midjourney #Fall #ArtLovers #Innovation #Inspiration #Art #Painting #Nature #ArtOfTheDay #Love #DigitalMarketing`,
         },
         {
           role: "user",
@@ -69,11 +69,11 @@ Serenity awaits at ai-art.tv
         },
         {
           role: "assistant",
-          content: `Space, through AI lenses 🌌💫 Earth's beauty, your cosmic canvas. Craft your astronaut's view
+          content: `Space, through AI lenses 🌌💫 Let's design your astronaut's perspective together
 
-Galactic art at ai-art.tv
+Rocket launch your project via DM or at ai-art.tv/create-yours
 
-#AI #AiArt #Space #Earth #DigitalArt #Universe #Creativity #Inspiration #ArtOfTheDay #BeautyAbove #SciArt #TechInArt #Astronaut`,
+#AI #AiArt #AstronautView #ArtCollab #DigitalUniverse #SciArt #Inspiration #ArtOfTheDay #TechInArt #ArtLovers #DigitalMarketing`,
         },
         {
           role: "user",
@@ -82,11 +82,11 @@ Galactic art at ai-art.tv
         },
         {
           role: "assistant",
-          content: `Elegance on the shore 🌊✨ AI captures the allure of pearls against a tropical canvas
+          content: `Elegance on the shore with AI 🌊✨ Let's craft your vision of oceanic beauty together
 
-Find your ocean's treasure at ai-art.tv
+DM or sail to ai-art.tv/create-yours to tailor your oceanic art
 
-#AI #AiArt #Jewelry #Pearls #Beach #Inspiration #ArtOfTheDay #Elegance #Luxury #Style #Ocean #Creativity #Midjourney #DigitalMarketing`,
+#AI #AiArt #ArtCollab #Jewelry #Beach #Luxury #OceanArt #ArtOfTheDay #Inspiration #Elegance #DigitalMarketing #ArtLovers`,
         },
         {
           role: "user",
@@ -97,7 +97,7 @@ Find your ocean's treasure at ai-art.tv
 
     const tweetContent = completion.choices[0].message.content as string;
 
-    // Trim Tweet to ensure the length is under 260
+    // Trim Tweet to ensure the length is under 270
     const trimedTweetContent = trimTweetContent(tweetContent);
 
     return trimedTweetContent;
