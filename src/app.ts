@@ -10,6 +10,7 @@ import userRouter from "./routes/user";
 import oauth1Router from "./routes/oauth1";
 import oauth2Router from "./routes/oauth2";
 import adminFavouriteRouter from "./routes/admin/favourite";
+import adminRemoveOldImagesRouter from "./routes/admin/removeOldImages";
 import { getRandomPublicImage } from "./services/prisma-crud/image";
 import passport from "passport";
 import passportConfig from "./services/auth/passport";
@@ -51,7 +52,8 @@ app.use("/oauth1", oauth1Router);
 app.use("/oauth2", oauth2Router);
 
 // Admin Routers
-app.use(adminFavouriteRouter);
+app.use("/admin", adminFavouriteRouter);
+app.use("/admin", adminRemoveOldImagesRouter);
 
 app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);

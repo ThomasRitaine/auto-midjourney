@@ -7,7 +7,7 @@ import { getAllFavouriteImagesWithPrompt } from "../../services/prisma-crud/imag
 const router = express.Router();
 
 router.get(
-  "/admin/favourite",
+  "/favourite",
   requireAuth,
   requireRole(Role.ADMIN),
   (req: Request, res: Response) => {

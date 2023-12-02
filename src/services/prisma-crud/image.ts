@@ -302,3 +302,20 @@ export const getRandomFavoritedNotTweetedImage = async (): Promise<
   const randomImage = images[Math.floor(Math.random() * images.length)] ?? null;
   return randomImage;
 };
+
+// Function to get all non favourited images that were created before a given date
+export const getNonFavouritedImagesCreatedBefore = async (
+  date: Date,
+): Promise<Image[]> => {
+  const images = await prisma.image.findMany({
+    where: {
+      favouratedByUser: {
+        none: {},
+      },
+      createdAt: {
+        lt: date,
+      },
+    },
+  });
+  return images;
+};
