@@ -2,6 +2,11 @@ import { type User } from "@prisma/client";
 import { type RequestHandler } from "express";
 import passport from "passport";
 
+/**
+ * Middleware to authenticate a JWT token.
+ * @param redirectIfNotAuthenticated - If true, redirects to login page when the user is not authenticated.
+ * @returns {RequestHandler} Express middleware for JWT authentication.
+ */
 const authenticateJWT = (
   redirectIfNotAuthenticated: boolean,
 ): RequestHandler => {

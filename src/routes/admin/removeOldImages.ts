@@ -9,6 +9,15 @@ import {
 
 const router = express.Router();
 
+/**
+ * Removes old images that are not marked as favourites.
+ * @route GET /admin/remove-old-images
+ * @middleware requireAuth - Ensures that the user is authenticated.
+ * @middleware requireRole - Restricts access to users with ADMIN role.
+ * @description Deletes all non-favourited images that were created more than one month ago.
+ *              It is intended to be used for periodic cleanup of old images to save storage space.
+ * @returns {Response} Sends a 200 status code upon successful deletion of images.
+ */
 router.get(
   "/remove-old-images",
   requireAuth,

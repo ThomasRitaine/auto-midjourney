@@ -1,6 +1,12 @@
 import { type MJMessage, type Midjourney } from "midjourney";
 import sleep from "../../util/sleep";
 
+/**
+ * Upscales generated images using the Midjourney client.
+ * @param {Midjourney} client - The Midjourney client instance.
+ * @param {MJMessage} imagineMJMessage - The initial message containing image generation results.
+ * @returns {Promise<MJMessage[]>} An array of messages containing upscaled images.
+ */
 async function upscaleImages(
   client: Midjourney,
   imagineMJMessage: MJMessage,
@@ -37,7 +43,7 @@ async function upscaleImages(
       `Upscaled ${upscaledImages.length} over ${upscaleOptions.length}`,
     );
 
-    // Sleep for 500ms
+    // Sleep for 500ms to manage request timing
     await sleep(500);
   }
 

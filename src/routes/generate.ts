@@ -16,6 +16,14 @@ import requireRole from "../middlewares/requireRole";
 
 const router = express.Router();
 
+/**
+ * Generation page route: Displays the image generation page to the user.
+ * @route GET /generate
+ * @middleware requireAuth - Ensures that the user is authenticated.
+ * @middleware requireRole - Restricts access to users with GENERATE_RELAX or GENERATE_FAST roles, or ADMIN role.
+ * @description Renders the generation page, providing the user roles for UI logic.
+ * @returns {Template} Renders the 'generate' template with user roles.
+ */
 router.get(
   "/",
   requireAuth,
@@ -31,6 +39,20 @@ router.get(
   },
 );
 
+/**
+ * Image generation and collection addition route.
+ * @route POST /generate
+ * @middleware requireAuth - Ensures that the user is authenticated.
+ * @middleware requireRole - Restricts access to users with GENERATE_RELAX or GENERATE_FAST roles, or ADMIN role.
+ * @description Processes the generation of images based on user prompts and adds them to collections.
+ *              It also determines the generation speed based on user roles.
+ * @param {string} defaultCollection - Default collection name for generated images.
+ * @param {string} generationSpeed - The speed of generation (FAST or RELAX).
+ * @param {string | string[]} prompt - The prompts used for generating images.
+ * @param {number | number[]} repeat - The number of repeats for each prompt.
+ * @param {string | string[]} collection - The names of collections to add generated images to.
+ * @returns {Response} Redirects to the appropriate collection page after generation.
+ */
 router.post(
   "/",
   requireAuth,
@@ -67,6 +89,7 @@ router.post(
 
       const collections: Collection[] = [];
 
+      // Logic to handle collection creation and retrieval
       for (let collectionName of collectionsName) {
         collectionName =
           collectionName === "" ? defaultCollection : collectionName;
@@ -87,6 +110,7 @@ router.post(
 
       const generationInfoGroup: GenerationInfo[] = [];
 
+      // Creating generation info for each prompt
       for (let index = 0; index < prompts.length; index++) {
         const prompt = prompts[index];
         const generationInfo = await createGenerationInfo(
@@ -105,6 +129,7 @@ router.post(
         (item) => item.id === generationInfoGroup[0].id,
       );
 
+      // Redirect based on the uniqueness of the collection
       if (generationInfoGroup.length === 1 || isCollectionUnique) {
         res.redirect(`/collection/${collections[0].slug}`);
       } else {

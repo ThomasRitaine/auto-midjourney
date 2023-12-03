@@ -23,6 +23,14 @@ import { unlinkGenerationInfoFromCollection } from "../services/prisma-crud/gene
 
 const router = express.Router();
 
+/**
+ * Collections overview page.
+ * @route GET /collection
+ * @middleware identifyUser - Identifies the user but does not restrict access if not authenticated.
+ * @description Retrieves and displays collections available to the user. This includes the user's collections, public collections,
+ *              and, if authorized, all collections. It also includes information about the number of images and the first image in each collection.
+ * @returns {Template} Renders the 'collections' template with the collections and associated data.
+ */
 router.get("/", identifyUser, (req: Request, res: Response) => {
   void (async () => {
     const user = req.user as User | false;
@@ -83,6 +91,13 @@ router.get("/", identifyUser, (req: Request, res: Response) => {
   })();
 });
 
+/**
+ * Favourites collection page.
+ * @route GET /collection/favourites
+ * @middleware requireAuth - Ensures that the user is authenticated.
+ * @description Displays the favourite images of the authenticated user.
+ * @returns {Template} Renders the 'collection' template with the user's favourite images.
+ */
 router.get("/favourites", requireAuth, (req: Request, res: Response) => {
   void (async () => {
     const user = req.user as User;
@@ -115,6 +130,15 @@ router.get("/favourites", requireAuth, (req: Request, res: Response) => {
   })();
 });
 
+/**
+ * Specific collection page.
+ * @route GET /collection/:slug
+ * @middleware identifyUser - Identifies the user but does not restrict access if not authenticated.
+ * @description Retrieves and displays a specific collection based on the slug. It handles privacy settings and
+ *              determines if the user can access the collection. Also includes user-specific information, like if the user generated an image or marked it as a favourite.
+ * @param {string} slug - The slug of the collection.
+ * @returns {Template} Renders the 'collection' template with the specified collection's details.
+ */
 router.get("/:slug", identifyUser, (req: Request, res: Response) => {
   void (async () => {
     const { slug } = req.params;
@@ -176,7 +200,13 @@ router.get("/:slug", identifyUser, (req: Request, res: Response) => {
   })();
 });
 
-// Route to update a collection
+/**
+ * Update a collection.
+ * @route POST /collection/:id
+ * @description Updates the details of a specific collection. This can include changing the name or the public/private status of the collection.
+ * @param {string} id - The ID of the collection to update.
+ * @returns {Response} Sends a status indicating the success or failure of the operation.
+ */
 router.post("/:id", (req: Request, res: Response) => {
   void (async () => {
     const { id } = req.params;
@@ -202,7 +232,14 @@ router.post("/:id", (req: Request, res: Response) => {
   })();
 });
 
-// Route to delete a collection and all its images
+/**
+ * Delete a collection and its images.
+ * @route DELETE /collection/:id
+ * @middleware requireAuth - Ensures that the user is authenticated.
+ * @description Deletes a specific collection and all its associated images. Restricted to the collection's owner or admin users.
+ * @param {string} id - The ID of the collection to delete.
+ * @returns {Response} Sends a status message indicating the outcome of the deletion process.
+ */
 router.delete("/:id", requireAuth, (req: Request, res: Response) => {
   void (async () => {
     const collectionId = req.params.id;

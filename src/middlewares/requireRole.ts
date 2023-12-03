@@ -1,6 +1,11 @@
 import { Role, type User } from "@prisma/client";
 import { type RequestHandler } from "express";
 
+/**
+ * Middleware to require specific roles for accessing a route.
+ * @param allowedRoles - List of roles allowed to access the route.
+ * @returns {RequestHandler} Express middleware for role-based access control.
+ */
 const requireRole = (...allowedRoles: string[]): RequestHandler => {
   return (req, res, next) => {
     // This middleware runs after requireAuth, so req.user should be defined

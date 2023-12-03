@@ -6,6 +6,15 @@ import { getAllFavouriteImagesWithPrompt } from "../../services/prisma-crud/imag
 
 const router = express.Router();
 
+/**
+ * Displays all favourite images.
+ * @route GET /admin/favourite
+ * @middleware requireAuth - Ensures that the user is authenticated.
+ * @middleware requireRole - Restricts access to users with ADMIN role.
+ * @description Retrieves and displays all images marked as favourites across all users.
+ *              Additionally, it determines if the authenticated user is the creator of each image.
+ * @returns {Template} Renders the 'collection' template with all favourite images and related data.
+ */
 router.get(
   "/favourite",
   requireAuth,
@@ -21,13 +30,13 @@ router.get(
 
       const images = await getAllFavouriteImagesWithPrompt();
 
-      // For each image, determine if the user is the owner of the image, and put the boolean in an array with the image id as key
+      // Determine if the user is the owner of each image
       const isUserGenerator: Record<string, boolean> = {};
       const isFavourite: Record<string, boolean> = {};
       for (const image of images ?? []) {
-        isUserGenerator[image.id] = true;
+        isUserGenerator[image.id] = true; // Assuming admin is the owner of all favourite images
         isFavourite[image.id] = image.favouratedByUser.some(
-          (userFavouatingImage) => userFavouatingImage.id === user.id,
+          (userFavouritingImage) => userFavouritingImage.id === user.id,
         );
       }
 
@@ -35,8 +44,8 @@ router.get(
         images,
         collection,
         isUserLoggedIn: true,
-        isUserGenerator, // Array of [imageId: boolean] where boolean is true if the user is the generator of the image
-        isFavourite,
+        isUserGenerator, // Indicates if the user is the generator of the image
+        isFavourite, // Indicates if the image is in the user's favourites
       });
     })();
   },
