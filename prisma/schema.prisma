@@ -45,7 +45,7 @@ model Image {
   generationInfo   GenerationInfo @relation(fields: [generationInfoId], references: [id])
   collection       Collection     @relation(fields: [collectionId], references: [id])
   favouratedByUser User[]
-  isTweeted        Boolean        @default(false)
+  isPosted         Boolean        @default(false)
   generationInfoId String
   collectionId     String
   createdAt        DateTime       @default(now())

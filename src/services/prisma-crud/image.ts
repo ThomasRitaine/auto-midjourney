@@ -289,7 +289,7 @@ export const getRandomFavoritedNotTweetedImage = async (): Promise<
       favouratedByUser: {
         some: {},
       },
-      isTweeted: false,
+      isPosted: false,
     },
     include: {
       generationInfo: {

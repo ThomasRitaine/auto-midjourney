@@ -14,7 +14,7 @@ import adminRemoveOldImagesRouter from "./routes/admin/removeOldImages";
 import { getRandomPublicImage } from "./services/prisma-crud/image";
 import passport from "passport";
 import passportConfig from "./services/auth/passport";
-import scheduleTweetPosting from "./services/twitter/scheduleTweetPosting";
+import scheduleSocialMediaPosting from "./services/social-media-bot/scheduleSocialMediaPosting";
 
 const app = express();
 const port = 3000;
@@ -59,8 +59,8 @@ app.listen(port, () => {
   console.log(`Server started on http://localhost:${port}`);
 });
 
-// Start the Twitter bot, scheduling tweets every X hours with a variation of Y minutes
-void scheduleTweetPosting(
-  process.env.TWITTER_TWEET_INTERVAL_HOURS as unknown as number,
-  process.env.TWITTER_TWEET_VARIATION_MINUTES as unknown as number,
+// Start the social media bot, scheduling post every X minutes with a variation of Y minutes
+void scheduleSocialMediaPosting(
+  process.env.SOCIAL_MEDIA_POSTING_INTERVAL_MINUTES as unknown as number,
+  process.env.SOCIAL_MEDIA_POSTING_VARIATION_MINUTES as unknown as number,
 );
