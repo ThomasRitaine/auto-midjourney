@@ -178,7 +178,9 @@ In the development environment, you can access the following services:
 
 ```
 .
-├── .github/workflows/        # GitHub Actions workflows for CI/CD.
+├── .github/                  # GitHub-specific configurations and resources.
+│   ├── ISSUE_TEMPLATE/       # Templates for bug reports and feature requests.
+│   └── workflows/            # GitHub Actions workflows for CI/CD.
 ├── docs/                     # Project documentation and resources.
 │   └── image/                # Images used to illustrate the documentation.
 ├── image/                    # Contains all AI generated images.
