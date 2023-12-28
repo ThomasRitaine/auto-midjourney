@@ -46,6 +46,8 @@ model Image {
   collection       Collection     @relation(fields: [collectionId], references: [id])
   favouratedByUser User[]
   isPosted         Boolean        @default(false)
+  ipfsUri          String?
+  tokenId          Int?
   generationInfoId String
   collectionId     String
   createdAt        DateTime       @default(now())

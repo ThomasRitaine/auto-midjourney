@@ -8,6 +8,7 @@ services:
       - DATABASE_URL=postgresql://${DATABASE_USER_NAME}:${DATABASE_USER_PASSWORD}@database:5432/${DATABASE_NAME}?schema=public
     volumes:
       - image:/usr/src/app/image
+      - ./contractABI.json:/usr/src/app/src/services/nft/contractABI.json
     networks:
       - default
       - proxy
