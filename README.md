@@ -24,7 +24,7 @@
     <a href="https://github.com/ThomasRitaine/auto-midjourney"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/ThomasRitaine/auto-midjourney">View Demo</a>
+    <a href="https://labs.ai-art.tv">View Demo</a>
     ·
     <a href="https://github.com/ThomasRitaine/auto-midjourney/issues">Report Bug</a>
     ·
