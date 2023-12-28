@@ -34,19 +34,6 @@ services:
     networks:
       - default
 
-  # adminer:
-  #   image: adminer
-  #   environment:
-  #     ADMINER_DEFAULT_DB_DRIVER: postgres
-  #     ADMINER_DEFAULT_SERVER: database
-  #   networks:
-  #     - default
-  #     - proxy
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.adminer-${APP_NAME}.rule=Host(`adminer.${APP_DOMAIN_NAME_MIDJOURNEY}`)"
-  #     - "traefik.http.routers.adminer-${APP_NAME}.middlewares=auth-http-admin@file"
-
 volumes:
   image:
 
