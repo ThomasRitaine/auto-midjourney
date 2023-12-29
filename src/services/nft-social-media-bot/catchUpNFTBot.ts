@@ -25,7 +25,8 @@ export default async (): Promise<void> => {
     },
   });
 
-  // syncronous for loop with a try catch block and a delay
+  // syncronous for loop with a try catch block and a delay, shuffle the images array to randomize the order
+  images.sort(() => Math.random() - 0.5);
   for (const image of images) {
     try {
       console.log(`Catch up NFT bot started for image ${image.id}`);
