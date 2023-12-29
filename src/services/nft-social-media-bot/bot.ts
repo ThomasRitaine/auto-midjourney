@@ -24,12 +24,14 @@ export default async (
   );
   console.log("Content generated successfully");
 
-  // Create, publish and list the NFT
-  await createNFT(
-    generatedContent.nftName,
-    generatedContent.nftDescription,
-    image,
-  );
+  // Create, publish and list the NFT if not already created
+  if (image.tokenId === null) {
+    await createNFT(
+      generatedContent.nftName,
+      generatedContent.nftDescription,
+      image,
+    );
+  }
 
   // Post on Instagram
   await postInstagramImage(generatedContent.post, image.path);
