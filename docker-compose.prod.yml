@@ -11,7 +11,7 @@ services:
       - ./contractABI.json:/usr/src/app/src/services/nft/contractABI.json
     networks:
       - default
-      - proxy
+      - traefik
     labels:
       - "traefik.enable=true"
 
@@ -34,11 +34,14 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_USER_PASSWORD}
     networks:
       - default
+      - dbeaver
 
 volumes:
   image:
 
 networks:
   default:
-  proxy:
+  dbeaver:
+    external: true
+  traefik:
     external: true
