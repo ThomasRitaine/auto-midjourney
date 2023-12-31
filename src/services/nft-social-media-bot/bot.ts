@@ -22,6 +22,8 @@ export default async (
     image.generationInfo.prompt,
     image.createdAt,
   );
+  if (generatedContent === undefined)
+    throw new Error("Failed to generate content.");
   console.log("Content generated successfully");
 
   // Create, publish and list the NFT if not already created

@@ -36,6 +36,8 @@ export default async (): Promise<void> => {
         image.generationInfo.prompt,
         image.createdAt,
       );
+      if (generatedContent === undefined)
+        throw new Error("Failed to generate content.");
       console.log(`Content generated successfully for image ${image.id}`);
 
       // Create, publish and list the NFT
