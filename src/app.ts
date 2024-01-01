@@ -15,7 +15,6 @@ import { getRandomPublicImage } from "./services/prisma-crud/image";
 import passport from "passport";
 import passportConfig from "./services/auth/passport";
 import nftSocialMediaScheduler from "./services/nft-social-media-bot/scheduler";
-import catchUpNFTBot from "./services/nft-social-media-bot/catchUpNFTBot";
 
 const app = express();
 const port = 3000;
@@ -65,6 +64,3 @@ void nftSocialMediaScheduler(
   process.env.SOCIAL_MEDIA_POSTING_INTERVAL_MINUTES as unknown as number,
   process.env.SOCIAL_MEDIA_POSTING_VARIATION_MINUTES as unknown as number,
 );
-
-// Temporary: create NFT for all images that have been posted but with no tokenId
-void catchUpNFTBot();
