@@ -5,7 +5,7 @@ services:
     image: ghcr.io/thomasritaine/auto-midjourney:main
     restart: unless-stopped
     environment:
-      - DATABASE_URL=postgresql://${DATABASE_USER_NAME}:${DATABASE_USER_PASSWORD}@database:5432/${DATABASE_NAME}?schema=public
+      - DATABASE_URL=postgresql://${DATABASE_USER_NAME}:${DATABASE_USER_PASSWORD}@database-auto-midjourney:5432/${DATABASE_NAME}?schema=public
     volumes:
       - image:/usr/src/app/image
       - ./contractABI.json:/usr/src/app/src/services/nft/contractABI.json
@@ -26,7 +26,7 @@ services:
       - "traefik.http.routers.prisma-${APP_NAME}.service=prisma-${APP_NAME}"
       - "traefik.http.services.prisma-${APP_NAME}.loadbalancer.server.port=5555"
 
-  database:
+  database-auto-midjourney:
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DATABASE_NAME}

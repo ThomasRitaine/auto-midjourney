@@ -2,10 +2,12 @@ version: "3.8"
 
 services:
   app:
+    depends_on:
+      - database-auto-midjourney
     env_file:
       - .env
 
-  database:
+  database-auto-midjourney:
     image: postgres:12
     volumes:
       - database-data:/var/lib/postgresql/data
