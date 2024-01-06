@@ -32,7 +32,7 @@ export async function listNFT(tokenId: number): Promise<void> {
       tokenAddress: contractAddress,
     },
     accountAddress: walletAddress,
-    startAmount: 109, // 109 MATIC = 100€ at the time of writing
+    startAmount: Number(process.env.NFT_LISTING_PRICE_MATIC),
     expirationTime,
   });
 }
