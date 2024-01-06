@@ -3,6 +3,7 @@ import { mintNFT } from "./mintNFT";
 import { uploadToIPFS } from "./uploadToIPFS";
 import { updateImage } from "../prisma-crud/image";
 import { listNFT } from "./listNFT";
+import sleep from "../../util/sleep";
 
 /**
  * Handles the entire process of creating an NFT for a given image.
@@ -28,6 +29,9 @@ export default async (
   const tokenId = await mintNFT(ipfsUri);
   await updateImage(image.id, { tokenId: Number(tokenId) });
   console.log("NFT minted successfully");
+
+  // Sleeps for 5 seconds to allow the NFT to be minted before listing it
+  await sleep(5000);
 
   await listNFT(tokenId);
   console.log("NFT listed successfully");
