@@ -54,7 +54,7 @@ router.post("/login", (req: Request, res: Response) => {
         { id: user.id },
         process.env.JWT_SECRET as string,
         {
-          expiresIn: "8h",
+          expiresIn: "60 days",
         },
       );
 
