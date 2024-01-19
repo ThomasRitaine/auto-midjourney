@@ -41,7 +41,7 @@ export default async (
       openaiPrompt.push({ role: "user", content: prompt });
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4-1106-preview",
+        model: process.env.OPENAI_GENERATION_MODEL as string,
         max_tokens: 250,
         messages: openaiPrompt,
       });
