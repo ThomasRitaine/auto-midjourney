@@ -1,4 +1,4 @@
-ARG NODE_VERSION=18-alpine
+ARG NODE_VERSION=20-alpine
 
 
 ###################
