@@ -1,11 +1,13 @@
-version: "3.8"
-
 services:
   app:
     image: ghcr.io/thomasritaine/auto-midjourney:main
     restart: unless-stopped
+    depends_on:
+      - database-auto-midjourney
     environment:
       - DATABASE_URL=postgresql://${DATABASE_USER_NAME}:${DATABASE_USER_PASSWORD}@database-auto-midjourney:5432/${DATABASE_NAME}?schema=public
+    env_file:
+      - .env
     volumes:
       - image:/usr/src/app/image
       - ./contractABI.json:/usr/src/app/src/services/nft/contractABI.json
@@ -27,17 +29,21 @@ services:
       - "traefik.http.services.prisma-${APP_NAME}.loadbalancer.server.port=5555"
 
   database-auto-midjourney:
+    image: postgres:12-alpine
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DATABASE_NAME}
       POSTGRES_USER: ${DATABASE_USER_NAME}
       POSTGRES_PASSWORD: ${DATABASE_USER_PASSWORD}
+    volumes:
+      - database-data:/var/lib/postgresql/data
     networks:
       - default
       - dbeaver
 
 volumes:
   image:
+  database-data:
 
 networks:
   default:
